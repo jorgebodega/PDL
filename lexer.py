@@ -1,22 +1,22 @@
 import library.ply.lex as lex
 
 # Lista de palabras reservadas.
-reserved = {
-	'true' : 'TRUE',
-	'false' : 'FALSE',
-	'var' : 'VAR',
-	'function' : 'FUNC',
-	'int' : 'INT', 
-	'bool' : 'BOOL',
-	'chars' : 'CHARS',
-	'write' : 'WRITE',
-	'prompt' : 'PROMPT',
-	'return' : 'RETURN',
-	'switch' : 'SWITCH',
-	'case' : 'CASE',
-	'break' : 'BREAK',
-	'if' : 'IF',
-}
+reserved = (
+	'true',
+	'false',
+	'var',
+	'function',
+	'int',
+	'bool',
+	'chars',
+	'write',
+	'prompt',
+	'return',
+	'switch',
+	'case',
+	'break',
+	'if'
+)
 
 operators = (
 	'*',
@@ -32,7 +32,7 @@ operators = (
 	'-',
 )
 
-id = []
+ids = []
 
 tokens = (
    'NUM',
@@ -45,15 +45,45 @@ tokens = (
 
 # A regular expression rule with some action code
 def t_NUM(t):
-    r'\d+'
+    r'\d+|\-{1}\d+'
     t.value = int(t.value)    
     return t
 
 # A regular expression rule with some action code
 def t_OP(t):
-    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:|\-'
+    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:'
     t.value = int(operators.index(t.value)) + 1  
     return t
+
+# A regular expression rule with some action code
+def t_CAD(t):
+    r'\'{1}([a-z]|[A-Z])+\'{1}'
+    t.value = str(t.value) 
+    return t
+
+# A regular expression rule with some action code
+def t_PalRes(t):
+	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
+	try:
+		t.value = int(reserved.index(t.value)) + 1
+		return t
+	except Exception as e:
+		return t_ID(t)
+		pass
+
+
+def t_ID(t):
+	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
+	try:
+		t.value = int(ids.index(t.value)) + 1
+		t.type = tokens[3]
+		return t
+	except Exception as e:
+		ids.append(t.value)
+		t.value = int(ids.index(t.value)) + 1
+		t.type = tokens[3]
+		return t
+		pass
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -73,8 +103,21 @@ lexer = lex.lex()
 
 # Test it out
 data = '''
-3 ++ 4 * 10
-  ++ -20 *2
+3
+4
+++
+}
+-20
+20
+(
+'Hola'
+'Adios'
+break
+40
+bool
+jjiji
+hjnfb66gfjw
+hjnfb66gfjw
 '''
 
 # Give the lexer some input
