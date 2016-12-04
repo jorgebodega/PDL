@@ -43,25 +43,27 @@ tokens = (
    'EOF',
 )
 
-# A regular expression rule with some action code
+# Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
     r'\d+|\-{1}\d+'
     t.value = int(t.value)    
     return t
 
-# A regular expression rule with some action code
+# Expresión regular que nos permite identificar operadores. Cambiamos el valor a devolver para ordenar la lista
+# desde 1 en vez de 0
 def t_OP(t):
     r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:'
     t.value = int(operators.index(t.value)) + 1  
     return t
 
-# A regular expression rule with some action code
+# Expresión regular que nos permite identificar cadenas de caracteres incluidas entre ' y '
 def t_CAD(t):
-    r'\'{1}([a-z]|[A-Z])+\'{1}'
+    r'\'{1}.+\'{1}'
     t.value = str(t.value) 
     return t
 
-# A regular expression rule with some action code
+# Expresión regular que nos permite identificar palabras reservadas del lenguaje.
+# En caso de no ser una palabra reservada, comprobamos t_ID(t)
 def t_PalRes(t):
 	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
 	try:
@@ -71,7 +73,8 @@ def t_PalRes(t):
 		return t_ID(t)
 		pass
 
-
+# Expresión regular que nos permite encontrar identificadores del lenguaje.
+# Si la expresión que encontramos no esta incluida como identificador, la añadimos
 def t_ID(t):
 	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
 	try:
@@ -110,7 +113,7 @@ data = '''
 -20
 20
 (
-'Hola'
+'Ho6666la'
 'Adios'
 break
 40
