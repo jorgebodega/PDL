@@ -76,7 +76,7 @@ def t_PalRes(t):
 # Expresión regular que nos permite encontrar identificadores del lenguaje.
 # Si la expresión que encontramos no esta incluida como identificador, la añadimos
 def t_ID(t):
-	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
+	r'([a-z]|[A-Z]){1}([]|[]|_)+([a-z]|[A-Z]){1}'
 	try:
 		t.value = int(ids.index(t.value)) + 1
 		t.type = tokens[3]
@@ -105,27 +105,13 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''
-3
-4
-++
-}
--20
-20
-(
-'Ho6666la'
-'Adios'
-break
-40
-bool
-jjiji
-hjnfb66gfjw
-hjnfb66gfjw
-'''
+texto = open("programa.js","r")
 
 # Give the lexer some input
-lexer.input(data)
+lexer.input(texto.read())
 
 # Tokenize
 for tok in lexer:
   print(tok)
+
+texto.close()

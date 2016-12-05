@@ -42,13 +42,10 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''
-3 + 4 * 10
-  + -20 *2
-'''
+texto = open("programa.js","r")
 
 # Give the lexer some input
-lexer.input(data)
+lexer.input(texto)
 
 # Tokenize
 for tok in lexer:
