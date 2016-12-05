@@ -1,5 +1,6 @@
 /*Comentario*/
 5 * 6 = 30
+var true
 var a_64t_ = true
 (30++)
 {45-25}
