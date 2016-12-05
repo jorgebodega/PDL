@@ -6,11 +6,14 @@ reserved = ('true','false','var','function','int','bool','chars','write','prompt
 # Lista de operadores
 operators = ('*','>','!','=','++','(',')','{','}',':','-')
 
-#Lista con los identificadores que iremos añadiendo
+# Lista con los identificadores que iremos añadiendo
 ids = []
 
-#Lista con los diferentes tipos de tokens
+# Lista con los diferentes tipos de tokens
 tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a lo bruto
+
+# Lista de tokens que va sacando el analizador
+toks = []
 
 # Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
@@ -66,6 +69,11 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
+# Calcula la linea en la que estamos
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 # Construye el analizador
 lexer = lex.lex()
 
@@ -76,6 +84,7 @@ texto = open("programa.js","r")
 for text in texto:
 	lex.input(text) #Añadimos la linea al analizador
 	for tok in lexer: #Va recorriendo los caracteres para ir haciendo los tokens
+		toks.append(tok)
 		print("<" + str(tok.type) + ", " + str(tok.value) + ">") #Imprime el token con el formato <A, B>
 
 print("<" + str(tokens[5]) + ", >") #Imprime el token EOF con el formato <EOF, >
