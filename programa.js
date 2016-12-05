@@ -1,11 +1,11 @@
-/*Comentario*/
+// Comentario
 5 * 6 = 30
 var true
 var a_64t_ = true
 (30++)
-{45-25}
+{45-25} //Comentario 2
 3
-'Ho6666la'
+'Ho6666la' //Comentario 	3
 'Adios'
 Adios
 break

@@ -1,47 +1,16 @@
 import library.ply.lex as lex
 
 # Lista de palabras reservadas.
-reserved = (
-	'true',
-	'false',
-	'var',
-	'function',
-	'int',
-	'bool',
-	'chars',
-	'write',
-	'prompt',
-	'return',
-	'switch',
-	'case',
-	'break',
-	'if'
-)
+reserved = ('true','false','var','function','int','bool','chars','write','prompt','return','switch','case','break','if')
 
-operators = (
-	'*',
-	'>',
-	'!',
-	'=',
-	'++',
-	'(',
-	')',
-	'{',
-	'}',
-	':',
-	'-',
-)
+# Lista de operadores
+operators = ('*','>','!','=','++','(',')','{','}',':','-')
 
+#Lista con los identificadores que iremos añadiendo
 ids = []
 
-tokens = (
-   'NUM',
-   'CAD',
-   'OP',
-   'ID',
-   'PalRes',
-   'EOF',
-)
+#Lista con los diferentes tipos de tokens
+tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a lo bruto
 
 # Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
@@ -58,8 +27,8 @@ def t_OP(t):
 
 # Expresión regular que nos permite identificar cadenas de caracteres incluidas entre ' y '
 def t_CAD(t):
-    r'\'{1}.+\'{1}'
-    t.value = str(t.value) 
+    r'\'{1}\w+\'{1}'
+    t.value = str(t.value)
     return t
 
 # Expresión regular que nos permite identificar palabras reservadas del lenguaje.
@@ -88,33 +57,29 @@ def t_ID(t):
 		return t
 		pass
 
-# Define a rule so we can track line numbers
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
-# A string containing ignored characters (spaces and tabs)
+# Reglas que ignoran espacios, tabulados y comentarios del tipo //
 t_ignore  = ' \t'
-t_ignore_COMMENT = r'\/{1}\*{1}.+\*{1}\/{1}'
+t_ignore_COMMENT = r'\/{2}.+|\W{1}'
 
-# Error handling rule
+# Manejo de errores (No debería aparecer ninguno)
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-# Build the lexer
+# Construye el analizador
 lexer = lex.lex()
 
-# Test it out
+# Abre el archivo que contiene nuestro programa
 texto = open("programa.js","r")
 
+# Nos recorremos el archivo linea a linea
 for text in texto:
-	print(text)
-	lex.input(text)
-	# Tokenize
-	for tok in lexer:
-		print("<" + str(tok.type) + ", " + str(tok.value) + ">")
+	lex.input(text) #Añadimos la linea al analizador
+	for tok in lexer: #Va recorriendo los caracteres para ir haciendo los tokens
+		print("<" + str(tok.type) + ", " + str(tok.value) + ">") #Imprime el token con el formato <A, B>
 
-print(ids)
+print("<" + str(tokens[5]) + ", >") #Imprime el token EOF con el formato <EOF, >
+# Nota: no he encontrado la forma de hacerlo, lo dejo así.
 
+#Cerramos el puntero
 texto.close()
