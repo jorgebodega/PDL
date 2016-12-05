@@ -65,7 +65,7 @@ def t_CAD(t):
 # Expresión regular que nos permite identificar palabras reservadas del lenguaje.
 # En caso de no ser una palabra reservada, comprobamos t_ID(t)
 def t_PalRes(t):
-	r'([a-z]|[A-Z]){1}.+([a-z]|[A-Z]){1}'
+	r'([a-z]|[A-Z]){1}.+'
 	try:
 		t.value = int(reserved.index(t.value)) + 1
 		return t
@@ -76,7 +76,7 @@ def t_PalRes(t):
 # Expresión regular que nos permite encontrar identificadores del lenguaje.
 # Si la expresión que encontramos no esta incluida como identificador, la añadimos
 def t_ID(t):
-	r'([a-z]|[A-Z]){1}([]|[]|_)+([a-z]|[A-Z]){1}'
+	r'([a-z]|[A-Z]){1}.+'
 	try:
 		t.value = int(ids.index(t.value)) + 1
 		t.type = tokens[3]
@@ -95,6 +95,7 @@ def t_newline(t):
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
+t_ignore_COMMENT = r'\/{1}\*{1}.+\*{1}\/{1}'
 
 # Error handling rule
 def t_error(t):
@@ -107,11 +108,11 @@ lexer = lex.lex()
 # Test it out
 texto = open("programa.js","r")
 
-# Give the lexer some input
-lexer.input(texto.read())
-
-# Tokenize
-for tok in lexer:
-  print(tok)
+for text in texto:
+	print(text)
+	lex.input(text)
+	# Tokenize
+	for tok in lexer:
+		print("<" + str(tok.type) + ", " + str(tok.value) + ">")
 
 texto.close()
