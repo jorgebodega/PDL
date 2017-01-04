@@ -15,8 +15,6 @@ tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a
 # Lista de tokens que va sacando el analizador
 toks = []
 
-TODAY IS GONNA BE A GOOD DAY
-
 # Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
     r'\d+|\-{1}\d+'
