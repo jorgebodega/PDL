@@ -9,7 +9,6 @@ operators = ('*','>','!','=','++','(',')','{','}',':','-')
 # Lista con los identificadores que iremos añadiendo
 ids = []
 
-
 # Lista con los diferentes tipos de tokens
 tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a lo bruto
 
