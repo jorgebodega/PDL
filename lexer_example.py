@@ -12,7 +12,7 @@ tokens = (
 )
 
 # Regular expression rules for simple tokens
-t_PLUS    = r'\+'
+t_PLUS     = r'\+'
 t_MINUS   = r'-'
 t_TIMES   = r'\*'
 t_DIVIDE  = r'/'
@@ -22,7 +22,7 @@ t_RPAREN  = r'\)'
 # A regular expression rule with some action code
 def t_NUMBER(t):
     r'\d+'
-    t.value = int(t.value)    
+    t.value = int(t.value)
     return t
 
 # Define a rule so we can track line numbers
