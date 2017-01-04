@@ -45,8 +45,7 @@ lexer = lex.lex()
 texto = open("programa.js","r")
 
 # Give the lexer some input
-lexer.input(texto)
-
-# Tokenize
-for tok in lexer:
-  print(tok)
+for text in texto:
+    lexer.input(text)
+    for tok in lexer:
+        print(tok)
