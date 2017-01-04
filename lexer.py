@@ -15,17 +15,19 @@ tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a
 # Lista de tokens que va sacando el analizador
 toks = []
 
+TODAY IS GONNA BE A GOOD DAY
+
 # Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
     r'\d+|\-{1}\d+'
-    t.value = int(t.value)    
+    t.value = int(t.value)
     return t
 
 # Expresión regular que nos permite identificar operadores. Cambiamos el valor a devolver para ordenar la lista
 # desde 1 en vez de 0
 def t_OP(t):
     r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:'
-    t.value = int(operators.index(t.value)) + 1  
+    t.value = int(operators.index(t.value)) + 1
     return t
 
 # Expresión regular que nos permite identificar cadenas de caracteres incluidas entre ' y '
