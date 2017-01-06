@@ -7,6 +7,8 @@ var a_64t_ = true
 3
 'Ho6666la' //Comentario 	3
 'Adios'
+'Adios'
+Adios
 Adios
 break
 40
