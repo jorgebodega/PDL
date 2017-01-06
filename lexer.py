@@ -4,7 +4,7 @@ import library.ply.lex as lex
 reserved = ('true','false','var','function','int','bool','chars','write','prompt','return','switch','case','break','if')
 
 # Lista de operadores
-operators = ('*','>','!','=','++','(',')','{','}',':','-')
+operators = ('*','>','!','=','++','(',')','{','}',':',';','-')
 
 # Lista con los identificadores que iremos añadiendo
 ids = []
@@ -24,7 +24,7 @@ def t_NUM(t):
 # Expresión regular que nos permite identificar operadores. Cambiamos el valor a devolver para ordenar la lista
 # desde 1 en vez de 0
 def t_OP(t):
-    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:'
+    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:|\;'
     t.value = int(operators.index(t.value)) + 1
     return t
 

@@ -3,6 +3,7 @@
 <NUM, 6>
 <OP, 4>
 <NUM, 30>
+<OP, 11>
 <PalRes, 3>
 <PalRes, 1>
 <PalRes, 3>
