@@ -16,3 +16,4 @@ var bool aux = true
 var int jjiji = 13567
 var chars hjnfb66gfjw = {'a','b'}
 var chars hjnfb6_6gfjw = {'a','c'}
+50

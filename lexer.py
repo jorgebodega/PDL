@@ -10,7 +10,7 @@ operators = ('*','>','!','=','++','(',')','{','}',':','-')
 ids = []
 
 # Lista con los diferentes tipos de tokens
-tokens = ('NUM','CAD','OP','ID','PalRes','EOF') #El token EOF lo meto al final a lo bruto
+tokens = ('NUM','CAD','OP','ID','PalRes','EOF')
 
 # Lista de tokens que va sacando el analizador
 toks = []
@@ -77,7 +77,7 @@ def t_newline(t):
 # Construye el analizador
 lexer = lex.lex()
 
-# Abre el archivo que contiene nuestro programa
+# Abre el archivo que contiene nuestro programa y el archivo de destino
 texto = open("programa.js","r")
 archivo = open("tokens.txt", "w")
 
@@ -85,12 +85,19 @@ archivo = open("tokens.txt", "w")
 for text in texto:
     lex.input(text) #Añadimos la linea al analizador
     for tok in lexer: #Va recorriendo los caracteres para ir haciendo los tokens
-        toks.append(tok)
+        toks.append(tok) # Añadimos el token al final de la lista
         token = "<" + str(tok.type) + ", " + str(tok.value) + ">"
-        archivo.write(token + "\n")
+        archivo.write(token + "\n") # Sacamos el token al archivo para su lectura
 
-token = "<" + str(tokens[5]) + ", >"
-archivo.write(token)
+# Manejo del token EOF, que añadiremos al final del archivo
+tokenEOF = lex.LexToken() # Creamos el token
+tokenEOF.type = tokens[5] # Asignamos el valor EOF
+tokenEOF.value = "" # Le asignamos un valor vacío
+toks.append(tokenEOF) # Lo añadimos al final de la lista
+
+#Imprimimos tambien el token EOF
+token = "<" + str(tokenEOF.type) + ", " + str(tokenEOF.value) + ">"
+archivo.write(token) # Sacamos el token al archivo para su lectura
 
 #Cerramos el puntero
 texto.close()
