@@ -19,9 +19,10 @@
 <NUM, -25>
 <OP, 9>
 <NUM, 3>
+<OP, 1>
 Illegal number '32768': Out of Bounds
 <OP, 4>
-<NUM, 3>
+Illegal number '98304': Out of Bounds
 <CAD, 'Ho6666la'>
 <CAD, 'Adios'>
 <CAD, 'Adios'>

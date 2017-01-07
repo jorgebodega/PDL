@@ -1,7 +1,7 @@
 # An implementation of Dartmouth BASIC (1964)
 #
 
-from ply import *
+from ...ply import *
 import basiclex
 
 tokens = basiclex.tokens
@@ -139,7 +139,7 @@ def p_command_print_bad(p):
 
 
 def p_optend(p):
-    '''optend : COMMA 
+    '''optend : COMMA
               | SEMI
               |'''
     if len(p) == 2:

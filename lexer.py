@@ -102,10 +102,94 @@ toks.append(tokenEOF) # Lo añadimos al final de la lista
 token = "<" + str(tokenEOF.type) + ", " + str(tokenEOF.value) + ">"
 archivo.write(token) # Sacamos el token al archivo para su lectura
 
-#Cerramos el puntero
-texto.close()
-archivo.close()
-
 ##########################################################################
 ####################### Analizador Sintáctico ############################
 ##########################################################################
+
+parser = yacc.yacc()
+start = 'p'
+
+def p_P(p):
+    '''P: BZP | FZP | ZP | EOF'''
+
+def p_B(p):
+    '''B: EOF | empty'''
+
+def p_T(p):
+    '''T: EOF | empty'''
+
+def p_S(p):
+    '''S: EOF | empty'''
+
+def p_X(p):
+    '''X: EOF | empty'''
+
+def p_L(p):
+    '''L: EOF | empty'''
+
+def p_Q(p):
+    '''Q: EOF | empty'''
+
+def p_E(p):
+    '''E: EOF | empty'''
+
+def p_R(p):
+    '''R: EOF | empty'''
+
+def p_U(p):
+    '''U: EOF | empty'''
+
+def p_V(p):
+    '''V: EOF | empty'''
+
+def p_F(p):
+    '''F: EOF | empty'''
+
+def p_H(p):
+    '''H: EOF | empty'''
+
+def p_A(p):
+    '''A: EOF | empty'''
+
+def p_K(p):
+    '''K: EOF | empty'''
+
+def p_Z(p):
+    '''Z: EOF | empty'''
+
+def p_C(p):
+    '''C: EOF | empty'''
+
+def p_W(p):
+    '''W: EOF | empty'''
+
+def p_Y(p):
+    '''Y: EOF | empty'''
+
+def p_M(p):
+    '''M: EOF | empty'''
+
+def p_N(p):
+    '''N: EOF | empty'''
+
+def p_EOF(p):
+    '''EOF: '''
+    pass
+
+def p_empty(p):
+    'empty :'
+    pass
+
+while True:
+   try:
+       for text in texto:
+           s = raw_input(text)
+   except EOFError:
+       break
+   if not s: continue
+   result = parser.parse(s)
+   print(result)
+
+#Cerramos el puntero
+texto.close()
+archivo.close()
