@@ -4,7 +4,7 @@ var true
 var a_64t_ = true
 (30++)
 {45-25} //Comentario 2
-3
+3 % 32768 = 3
 'Ho6666la' //Comentario 	3
 'Adios'
 'Adios'

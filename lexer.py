@@ -1,30 +1,33 @@
 import library.ply.lex as lex
+import library.ply.yacc as yacc
 
-# Lista de palabras reservadas.
+# Listas
 reserved = ('true','false','var','function','int','bool','chars','write','prompt','return','switch','case','break','if')
-
-# Lista de operadores
-operators = ('*','>','!','=','++','(',')','{','}',':',';','-')
+operators = ('*','>','!','=','++','(',')','{','}',':','-',',',';')
+tokens = ('NUM','CAD','OP','ID','PalRes','EOF')
 
 # Lista con los identificadores que iremos añadiendo
 ids = []
 
-# Lista con los diferentes tipos de tokens
-tokens = ('NUM','CAD','OP','ID','PalRes','EOF')
-
 # Lista de tokens que va sacando el analizador
 toks = []
+
+##########################################################################
+######################### Analizador Léxico ##############################
+##########################################################################
 
 # Expresión regular que nos permite identificar cadenas de números, empiecen o no por un -
 def t_NUM(t):
     r'\d+|\-{1}\d+'
-    t.value = int(t.value)
-    return t
+    if (int(t.value) <= 32767):
+        t.value = int(t.value)
+        return t
+    else:   archivo.write("Illegal number '%i': Out of Bounds\n" % int(t.value))
 
 # Expresión regular que nos permite identificar operadores. Cambiamos el valor a devolver para ordenar la lista
 # desde 1 en vez de 0
 def t_OP(t):
-    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:|\;'
+    r'\*|\>|\!|\=|\+{2}|\(|\)|\{|\}|\:|\-|\,|\;'
     t.value = int(operators.index(t.value)) + 1
     return t
 
@@ -102,3 +105,7 @@ archivo.write(token) # Sacamos el token al archivo para su lectura
 #Cerramos el puntero
 texto.close()
 archivo.close()
+
+##########################################################################
+####################### Analizador Sintáctico ############################
+##########################################################################
