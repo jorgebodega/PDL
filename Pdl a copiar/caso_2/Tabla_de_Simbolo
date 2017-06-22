@@ -1,0 +1,21 @@
+CONTENIDO DE LA TABLA # TS_General :
+
+* LEXEMA : a
+  ATRIBUTOS :
+  + tipo : entero
+  + desplazamiento : 0
+  + Tam_parametros : null
+  + Tipo_parametro : null
+  + Retorno_funcion : null
+  + ptrTS_padre : null
+--------- ----------
+* LEXEMA : b
+  ATRIBUTOS :
+  + tipo : entero
+  + desplazamiento : 2
+  + Tam_parametros : null
+  + Tipo_parametro : null
+  + Retorno_funcion : null
+  + ptrTS_padre : null
+--------- ----------
+================================================

@@ -1,0 +1,9 @@
+var bool a 
+a= true
+var int b 
+b = 8
+var int i
+if ( i = 0 )
+{
+a= a + 1}
+

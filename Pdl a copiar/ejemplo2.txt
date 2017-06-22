@@ -1,0 +1,10 @@
+var int i 
+var bool a 
+
+i = 1
+a=True
+
+if (i &= 0)	{
+	a=False
+}
+

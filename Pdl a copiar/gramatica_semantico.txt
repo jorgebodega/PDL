@@ -1,0 +1,368 @@
+// DicTS[ident] := (TS,Desp) // asi se usa el Diccionario de TS
+// TS_actual => nombre TS actual
+// Desp_actual => desplazamiento TS actual
+// ptr_actual => identificador (ident) TS actual en DicTS
+// buscarTS => busca si existe TS en DicTS
+// buscarId => busca si exixte el id en la TS actual, en caso contrario devuelve null
+// buscarTipoId => busca si existe el id en la TS actual y devuelve su tipo, si no existe devuelve null
+// buscarTipoFuncion => busca si existe el id en la TS actual y es de tipo "function" y devuelve el tipo de parametros que se le pasa, si no existe, o no es funcion, devuelve null
+// insertarTS => inserta un id en la TS actual
+// insertarFunTs => inserta los parametros de una funcion dado un ptr_TS valido
+// crearTS => crea una TS nueva
+
+P' → 
+	{{ 
+	ptrTS_actual = "TS_General"
+	DicTS[ptrTS_actual] = [ [], 0, "null"] // (TS,Desp,TS_padre)
+	}} 
+	P 
+	{{ 
+	TS_actual = "null"
+	}}
+
+P → B Z P ( No hace nada)
+P → F Z P ( No hace nada)
+P → Z P ( No hace nada)
+P → eof ( No hace nada)
+
+Z → cr  ( No hace nada)
+
+F → function H id 
+	{{
+	if buscarTS(id.ent) ≠ null
+		Then Error (“Función ya declarada”)
+	else
+		insertarTS(id.ent, "function", Desp_actual, ptrTS_actual)
+		DicTS[ptrTS_actual] := (TS_actual,Desp_actual) // guarda la TS actual con el desplazamiento
+		crearTS TS_nueva
+		TS_actual := TS_nueva
+		Desp_actual := 0
+		ptrTS_anterior := ptrTS_actual
+		ptrTS_actual := id.ent
+	}}
+	(A) Z {
+	{{
+	insertarFunTS(ptrTS_anterio, id.ent, A.numParam, A.tipo, id.ent)   
+	}}
+	Z C }
+	{{
+	if C.tipo ≠ H.tipo or C.tipo ≠ tipo_ok
+		Then Error (“Funcion mal return”)
+	else
+		Then
+		DicTS[ptrTS_actual] := (TS_actual,Desp_actual) // guarda la TS actual con el desplazamiento
+		DicTS[ptrTS_anterior] := (TS_anterior,Desp_anterior) // recuperamos la tabla de simbolos anterior
+		TS_actual 	:= TS_anterior
+		Desp_actual := Desp_anterior
+		ptrTS_actual  := ptrTS_anterio
+		ptrTS_anterio := null
+	}}
+
+H → T 		{{ H.tipo = T.tipo , H.tamano = T.tamano }}
+H → 𝝺       {{ H.tipo = tipo_vacio  , H.tamano = 0 }}
+
+T → int 	{{ T.tipo = entero , T.tamano = 2 }}
+T → bool 	{{ T.tipo = logico , T.tamano = 1 }}
+T → chars 	{{ T.tipo = cadena  , T.tamano = 2 }}
+
+A → T id 
+	{{
+	if buscarId(id.ent) ≠ null
+		Then Error (“Identificador ya creado”)
+	else
+		Then 
+			insertarTS(id.ent, T.tipo, Desp_actual, ptrTS_actual)
+		 	Desp_actual += T.tamano 
+	}} 
+
+	K 
+
+	{{ 
+	A.tipo := f(T.tipo, K.tipo) 
+	A.numParam := K.numParam + 1
+	}}
+
+A → 𝝺 
+	{{ 
+	A.tipo = tipo_vacio
+	A.numParam := 0
+	}}
+
+K0 → , T id 
+	{{
+	if buscarId(id.ent) ≠ null
+		Then Error (“Identificador ya creado”)
+	else
+		Then 
+			insertarTS(id.ent, T.tipo, Desp_actual, ptrTS_actual)
+		 	Desp_actual += T.tamano
+	}} 
+	
+	K1 
+	
+	{{ 
+	K0.tipo := f(T.tipo, K1.tipo) 
+	K0.numParam := K1.numParam + 1
+	}}
+
+K → 𝝺 
+	{{ 
+	K.tipo = tipo_vacio
+	K.numParam := 0
+	}}
+
+B → var T id 
+	{{
+	if buscarId(id.ent) ≠ null
+		Then Error (“Identificador ya creado”)
+	else
+		Then 
+			insertarTS(id.ent, T.tipo, Desp_actual, ptrTS_actual)
+		 	Desp_actual += T.tamano
+		 	B.tipo := tipo_ok
+	}} 
+
+B → if (E) 
+	{{
+	if E.tipo == logico
+		Then B.tipo := tipo_ok
+	else
+		Then Error (“condición "if" no logica”)
+	}}
+
+	{ Z C } B'
+
+	{{
+	if C.tipo ≠ tipo_ok or B'.tipo ≠ tipo_ok
+		Then Error (“contenido "if" mal formado”)
+	}} 
+	
+B → S 
+	{{
+	B.tipo := S.tipo
+	}}
+
+B'→ else { Z C } 
+	{{
+	if C.tipo ≠ tipo_ok 
+		Then Error (“contenido "else" mal formado”)
+	else
+		Then B'.tipo := tipo_ok
+	}} 
+
+B'→ 𝝺
+	{{
+	B'.tipo := tipo_ok
+	}}
+
+S → id S'
+	{{
+	if buscarTipoId(id.ent) ≠ null
+		Then
+			if  buscarTipoFuncion(id.ent) ≠ null // CASO: id(L)
+				Then 
+					if buscarTipoFuncion(id.ent) == S'.tipo 
+						Then S.tipo := S'.tipo
+					else
+						Then Error (“Parametros mal insertados”)
+			else //CASO id = E
+				Then 
+				if buscarTipoId(id.ent) == S'.tipo
+					Then S.tipo := tipo_ok
+				else
+					Then Error (“asignacion mal formada”)
+	else
+		Then Error (“Identificador no declarado”)
+	}}
+
+S → return X 
+	{{
+	S.tipo := X.tipo
+	}}
+
+S → write (E) 
+	{{
+	S.tipo := E.tipo
+	}}
+
+S → prompt (id)
+	{{
+	if buscarTipoId(id.ent) ≠ "entero" or buscarTipoId(id.ent) ≠ "cadena"
+		Then Error (“uso incorrecto de "prompt" ”)
+	else
+		Then S.tipo:= buscarTipoId(id.ent)
+	}}
+
+S'→ (L)
+	{{
+	S'.tipo:= L.tipo
+	}}
+
+S'→ = E
+	{{
+	S'.tipo := E.tipo
+	}}
+
+X → E
+	{{
+	X.tipo := E.tipo
+	}} 
+
+X → 𝝺
+	{{
+	X.tipo := tipo_vacio
+	}}
+
+C0 → B Z C1 
+	{{
+	if C1.tipo ≠ tipo_error and B.tipo ≠ tipo_error
+		Then  C0.tipo := tipo_ok
+	else
+		Then Error (“contenido de corchetes mal formado”)
+	}}
+
+C → 𝝺  
+	{{
+	C.tipo := tipo_vacio
+	}}     
+
+L → E Q 
+	{{
+	if E.tipo ≠ tipo_error and Q.tipo ≠ tipo_error
+		Then L.tipo:= f(E.tipo,Q.tipo)
+	else
+		Then Error (“contenido parentesis del identificador llamado mal formado”)
+	}}
+
+L → 𝝺
+	{{
+	L.tipo := tipo_vacio
+	}}
+
+Q0 → , E Q1 
+	{{
+	if E.tipo ≠ tipo_error and Q1.tipo ≠ tipo_error
+		Then Q0.tipo:= f(E.tipo,Q.tipo)
+	else
+		Then Error (“contenido parentesis del identificador llamado mal formado”)
+
+	}}
+
+Q → 𝝺
+	{{
+	Q.tipo := tipo_vacio
+	}}
+
+E → R E' 
+	{{
+	if E'.tipo ≠ tipo_vacio and R.tipo ≠ E'.tipo
+		Then Error (“Comparacion de elementos con tipos distintos”)
+	else 
+		Then
+			if E'.tipo ≠ tipo_vacio
+				Then E.tipo := "logico"
+			else
+				Then E.tipo := R.tipo 
+
+	}}
+
+E'0→ && R E'1 
+	{{
+	if E'1.tipo ≠ tipo_vacio and E'1.tipo ≠ R.tipo ≠ "logico"
+		Then Error (“Comparacion de elementos de tipo no logico”)
+	else
+		Then E'0.tipo := R.tipo
+	}}
+
+E'0→ &= R E'1
+
+	{{
+	if E'1.tipo ≠ tipo_vacio and E'1.tipo ≠ R.tipo ≠ "logico"
+		Then Error (“Comparacion de elementos con asignacion de tipo no logico”)
+	else
+		Then E'0.tipo := R.tipo
+	}}
+
+E'→ 𝝺
+	{{
+	E'.tipo := tipo_vacio
+	}}
+
+R → U R'
+	{{
+	if R'.tipo ≠ tipo_vacio and U.tipo ≠ R'.tipo
+		Then Error (“Comparacion de elementos con tipos distintos”)
+	else 
+		Then
+			if R'.tipo ≠ tipo_vacio
+				Then R.tipo := "logico"
+			else
+				Then R.tipo := U.tipo 
+
+	}}
+
+R'0→ > U R'1
+	{{
+	if R'1.tipo ≠ tipo_vacio and R'1.tipo ≠ U.tipo ≠ "entero"
+		Then Error (“Comparacion de elementos de tipo no entero”)
+	else
+		Then R'0.tipo := U.tipo
+	}}
+
+R'→ 𝝺
+	{{
+	R'.tipo := tipo_vacio
+	}}
+
+U → V U'
+	{{
+	if U'.tipo ≠ tipo_vacio and V.tipo ≠ U'.tipo
+		Then Error (“Suma de elementos de tipo no entero”)
+	else
+		Then U.tipo := V.tipo 
+	}}
+
+U'0→ + V U'1 
+	{{
+	if V.tipo ≠ "entero"
+		Then Error (“Suma de elementos de tipo no entero”)
+	else
+		Then U'0.tipo := V.tipo 
+	}}
+
+U'→ 𝝺 
+	{{ 
+	U'.tipo := tipo_vacio
+	}}
+
+V → id V' 
+	{{
+	if buscarTipoId(id.ent) ≠ null
+		Then
+			if  buscarTipoFuncion(id.ent) ≠ null // CASO: id(L)
+				Then 
+					if buscarTipoFuncion(id.ent) == V'.tipo 
+						Then V.tipo := V'.tipo
+					else
+						Then Error (“Parametros mal insertados”)
+			else //CASO id
+				Then V.tipo := buscarTipoId(id.ent)
+	else
+		Then Error (“Identificador no declarado”)
+	}}
+
+V → (E) 	{{ V.tipo := E.tipo }}
+V → entero 	{{ V.tipo := entero }}
+V → cadena 	{{ V.tipo := cadena }}
+V → True 	{{ V.tipo := logico }}
+V → False 	{{ V.tipo := logico }}
+
+V'→ (L) 
+	{{
+	V'.tipo := L.tipo
+	}}
+
+V'→ 𝝺
+	{{
+	V'.tipo := tipo_vacio
+	}}

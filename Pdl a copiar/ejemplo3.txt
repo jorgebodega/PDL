@@ -1,0 +1,7 @@
+var int s	/* variable global cadena */
+function int FactorialRecursivo (int n, int p)	
+{
+	return FactorialRecursivo ( 8, 8 )	 
+}
+s = FactorialRecursivo ( 8 , "hola" )
+['s', 'FactorialRecursivo', 'n', 'p', 'FactorialRecursivo', 's', 'FactorialRecursivo']

@@ -1,0 +1,4 @@
+var int n
+n = 7
+
+if (n &= True) {}

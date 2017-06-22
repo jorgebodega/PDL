@@ -1,0 +1,66 @@
+//// Gramática correspondiente al sintáctico de la practica de PDL
+//// El formato del fichero de entrada debe ajustarse a esta gramática
+
+//// Conjunto de símbolos terminales
+
+Terminales = { id , { } ( ) function eof cr int bool chars if else return write prompt = && &= + > entero cadena True False var }
+
+NoTerminales = { P1 P Z F H T A K B B1 S S1 X C L Q E E1 R R1 U U1 V V1 }
+
+Axioma = P1
+
+Producciones = {
+P1 -> P 
+P -> B Z P 
+P -> F Z P 
+P -> Z P 
+P -> eof
+Z -> cr  
+F -> function H id ( A ) Z { Z C }
+H -> T 
+H -> lambda
+T -> int 
+T -> bool 
+T -> chars
+A -> T id K
+A -> lambda
+K -> , T id K 
+K -> lambda
+B -> var T id 
+B -> if ( E ) { Z C } B1 
+B -> S 
+B1 -> else { Z C } 
+B1 -> lambda 
+S -> id S1
+S -> return X 
+S -> write ( E ) 
+S -> prompt ( id )
+S1 -> ( L ) 
+S1 -> = E
+X -> E 
+X -> lambda
+C -> B Z C 
+C -> lambda 
+L -> E Q 
+L -> lambda
+Q -> , E Q 
+Q -> lambda
+E -> R E1 
+E1 -> && R E1 
+E1 -> &= R E1 
+E1 -> lambda
+R -> U R1
+R1 -> > U R1
+R1 -> lambda
+U -> V U1
+U1 -> + V U1
+U1 -> lambda
+V -> id V1 
+V -> ( E ) 
+V -> entero 
+V -> cadena 
+V -> True 
+V -> False
+V1 -> ( L ) 
+V1 -> lambda
+}

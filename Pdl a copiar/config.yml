@@ -1,0 +1,23 @@
+#Definiciones de Datos
+"(" : IniPar
+")" : FinPar
+"{" : IniLla
+"}" : FinLla
+"var" : PalRes
+"int": PalRes
+"bool" : PalRes
+"chars": PalRes
+"function" : PalRes
+"if" : PalRes
+"else" : PalRes
+"prompt": PalRes
+"return": PalRes
+"write": PalRes
+"True" : PalRes
+"False" : PalRes
+"," : Coma
+"=": OpAsi
+"&&": OpLogico
+"&=": OpEspcial
+"+" : Sum
+">" : OpNum

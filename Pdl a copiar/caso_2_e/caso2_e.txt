@@ -1,0 +1,5 @@
+var int a 
+a = "5"
+var int b 
+b = 6
+

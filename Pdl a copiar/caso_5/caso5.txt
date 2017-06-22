@@ -1,0 +1,23 @@
+/* Programa de ejemplo  */
+/******* José Luis Fuertes, 5, septiembre, 2015 *********/
+/* El ejemplo incorpora elementos del lenguaje opcionales y elementos que no hay que implementar */
+
+var int s	/* variable global cadena */
+s = 555 //safafasf
+var chars z
+
+function int imprime (int x)
+{
+	var int h
+	return z
+}
+function int FactorialRecursivo (int n, bool p)	
+{
+	if (p &= True)	{
+	} else {
+	n=s+1
+	}
+	return FactorialRecursivo ( imprime(n) , False )	 
+}
+var bool b
+b= s > s+1
