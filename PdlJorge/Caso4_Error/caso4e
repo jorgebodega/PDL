@@ -1,0 +1,14 @@
+var int a
+a = 5
+var int b
+b = 6
+if(a>b) b = a
+if(False) a = b
+switch(a)
+{
+  case 1: a = 1; break
+  case 2: a = 2; break
+  case 3: write("Hola")
+  break
+  case 4: prompt(True)
+}

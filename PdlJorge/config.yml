@@ -1,0 +1,30 @@
+#Definiciones de Datos
+#Palabras reservadas
+"True": PalRes
+"False": PalRes
+"var": PalRes
+"function": PalRes
+"int": PalRes
+"bool": PalRes
+"chars": PalRes
+"write": PalRes
+"prompt": PalRes
+"return": PalRes
+"switch": PalRes
+"case": PalRes
+"break": PalRes
+"if": PalRes
+#Operadores
+"*": Op
+">": Op
+"&&": Op
+"=": Op
+"++": Op
+"(": Op
+")": Op
+"{": Op
+"}": Op
+":": Op
+";": Op
+"-": Op
+",": Op

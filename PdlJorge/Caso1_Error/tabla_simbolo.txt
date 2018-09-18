@@ -1,0 +1,13 @@
+CONTENIDO DE LA TABLA # TS_General :
+
+* LEXEMA : 'a'
+  ATRIBUTOS :
+  + tipo : entero
+  + desplazamiento : 0
+--------- ----------
+* LEXEMA : 'b'
+  ATRIBUTOS :
+  + tipo : logico
+  + desplazamiento : 2
+--------- ----------
+================================================

@@ -1,0 +1,7 @@
+// Prueba de comentario
+var int a
+a = 2768
+var bool b
+b = False
+var chars c
+c = "PDL"

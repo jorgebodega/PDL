@@ -1,0 +1,12 @@
+< PalRes , var > 
+< PalRes , int > 
+< id , a > 
+< cr , - > 
+< PalRes , var > 
+< PalRes , bool > 
+< id , b > 
+< cr , - > 
+< PalRes , var > 
+< id , c > 
+< cr , - > 
+< FinFich , eof > 

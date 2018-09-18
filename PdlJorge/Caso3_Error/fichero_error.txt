@@ -1,0 +1,1 @@
+ERROR Semantico --> condición "if" no logica, en linea: 4
