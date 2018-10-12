@@ -15,11 +15,11 @@ class Token(object):
     entrando a modificar la libreria.
     """
 
-    def __init__(self, lextoken):
-        self.tipo = lextoken.type
-        self.valor = lextoken.value
-        self.linea = lextoken.lineno
-        self.columna = lextoken.lexpos
+    def __init__(self, tipo, valor, linea, columna):
+        self.tipo = tipo
+        self.valor = valor
+        self.linea = linea
+        self.columna = columna
 
     def __str__(self):
         return '<%s, %s>' % (str(self.tipo), str(self.valor))
@@ -169,10 +169,10 @@ class AnLex(object):
             tok = self.lexer.token()
             if not tok:
                 break
-            tokenFormatted = Token(tok)
+            tokenFormatted = Token(tok.type, tok.value, tok.lineno, tok.lexpos)
             # Lineas que muestran la informacion en el formato de la libreria
-            # self.fichero_salida.write(str(tokenFormatted) + '\n')
-            # tokens.append(tokenFormatted)
+            # self.fichero_salida.write(str(tok) + '\n')
+            # tokens.append(tok)
             self.fichero_salida.write(str(tokenFormatted) + '\n')
             tokens.append(tokenFormatted)
         self.lexer.lineno += 1
