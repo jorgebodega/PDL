@@ -7,7 +7,30 @@ los devuelve en un array y escribe en un archivo.
 
 import library.lex as lex
 
+
+class Token(object):
+    """
+    Esta clase es una clase auxiliar para manejar los tokens.
+    Hace lo mismo que la de la libreria, pero esta nos permite no estar
+    entrando a modificar la libreria.
+    """
+
+    def __init__(self, lextoken):
+        self.tipo = lextoken.type
+        self.valor = lextoken.value
+        self.linea = lextoken.lineno
+        self.columna = lextoken.lexpos
+
+    def __str__(self):
+        return '<%s, %s>' % (str(self.tipo), str(self.valor))
+
+    def __repr__(self):
+        return str(self)
+
 class AnLex(object):
+    """
+    Clase que contiene la libreria y hace uso de ella para crear y transmitir los tokens.
+    """
 
     # Lista con los tipos de tokens de nuestro analizador
     tokens = (
@@ -29,19 +52,58 @@ class AnLex(object):
     id = []
 
     # Expresiones regulares para los operadores
-    t_op_suma       = r'\+{1}'
-    t_op_posinc     = r'\+{2}'
-    t_op_resta      = r'-'
-    t_op_igual      = r'=='
-    t_op_noigual    = r'!='
-    t_op_and        = r'&&'
-    t_op_coma       = r','
-    t_op_asignacion = r'='
-    t_op_ptocoma    = r';'
-    t_op_corchab    = r'{'
-    t_op_corchcer   = r'}'
-    t_op_parenab    = r'\('
-    t_op_parencer   = r'\)'
+    def t_op_suma(self, t):
+        r'\+{1}'
+        t.value = '-'
+        return t
+    def t_op_posinc(self, t):
+        r'\+{2}'
+        t.value = '-'
+        return t
+    def t_op_resta(self, t):
+        r'-'
+        t.value = '-'
+        return t
+    def t_op_igual(self, t):
+        r'=='
+        t.value = '-'
+        return t
+    def t_op_noigual(self, t):
+        r'!='
+        t.value = '-'
+        return t
+    def t_op_and(self, t):
+        r'&&'
+        t.value = '-'
+        return t
+    def t_op_coma(self, t):
+        r','
+        t.value = '-'
+        return t
+    def t_op_asignacion(self, t):
+        r'='
+        t.value = '-'
+        return t
+    def t_op_ptocoma(self, t):
+        r';'
+        t.value = '-'
+        return t
+    def t_op_corchab(self, t):
+        r'{'
+        t.value = '-'
+        return t
+    def t_op_corchcer(self, t):
+        r'}'
+        t.value = '-'
+        return t
+    def t_op_parenab(self, t):
+        r'\('
+        t.value = '-'
+        return t
+    def t_op_parencer(self, t):
+        r'\)'
+        t.value = '-'
+        return t
 
     # Reglas que ignoran espacios, tabulados y comentarios del tipo //
     t_ignore = ' \t\n'
@@ -97,15 +159,21 @@ class AnLex(object):
     # Build the lexer
     def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
+        self.lexer.lineno = 1
 
     # Test it output
-    def test(self, data):
+    def tokenizeLine(self, data):
         self.lexer.input(data)
         tokens = []
         while True:
-             tok = self.lexer.token()
-             if not tok:
-                 break
-             self.fichero_salida.write(str(tok) + '\n')
-             tokens.append(tok)
+            tok = self.lexer.token()
+            if not tok:
+                break
+            tokenFormatted = Token(tok)
+            # Lineas que muestran la informacion en el formato de la libreria
+            # self.fichero_salida.write(str(tokenFormatted) + '\n')
+            # tokens.append(tokenFormatted)
+            self.fichero_salida.write(str(tokenFormatted) + '\n')
+            tokens.append(tokenFormatted)
+        self.lexer.lineno += 1
         return tokens

@@ -9,8 +9,9 @@ lexer.build()
 tokensTotales = []
 
 for linea in fichero_prueba:
-    tokens = lexer.test(linea)
+    tokens = lexer.tokenizeLine(linea)
     tokensTotales.append(tokens)
 # Insertamos aqui uno a mano con el final de fichero
 for token in tokensTotales:
-    print(token)
+    print(str(token))
+print('\n' + str(lexer.id))
