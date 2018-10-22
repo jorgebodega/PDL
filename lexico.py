@@ -7,7 +7,6 @@ los devuelve en un array y escribe en un archivo.
 
 import library.lex as lex
 
-
 class Token(object):
     """
     Esta clase es una clase auxiliar para manejar los tokens.
@@ -45,7 +44,7 @@ class AnLex(object):
 
     palabras_reservadas = (
         # Palabras reservadas de nuesto lenguaje
-        'true', 'false', 'var', 'function', 'int', 'bool', 'chars',
+        'true', 'false', 'var', 'function', 'int', 'bool', 'string',
         'print', 'prompt', 'return', 'for', 'break', 'if'
     )
 
@@ -109,9 +108,14 @@ class AnLex(object):
     t_ignore = ' \t\n'
     t_ignore_COMMENT = r'/{2}[ |\w|\W]+'
 
-    def __init__(self, fd):
-        self.fichero_salida = fd
+    def __init__(self, fs, fe):
+        self.fichero_salida = fs
+        self.fichero_error = fe
+        self.__errorCheck = False
         self.lexer = None
+
+    def getErrorCheck(self):
+        return self.__errorCheck
 
     def t_entero(self, t):
         r'\d+|\-{1}\d+'
@@ -153,8 +157,10 @@ class AnLex(object):
 
     # Manejo de errores (No debería aparecer ninguno)
     def t_error(self, t):
-        print('Illegal character "%s"' % t.value[0])
-        t.lexer.skip(1)
+        mensaje_error = 'Carácter no permitido en linea %d -> "%s"' % ( t.lineno, t.value[0])
+        self.fichero_error.write(mensaje_error)
+        # print(mensaje_error)
+        self.__errorCheck = True
 
     # Build the lexer
     def build(self, **kwargs):
@@ -165,8 +171,11 @@ class AnLex(object):
     def tokenizeLine(self, data):
         self.lexer.input(data)
         tokens = []
-        while True:
-            tok = self.lexer.token()
+        while not self.__errorCheck:
+            try:
+                tok = self.lexer.token()
+            except lex.LexError:
+                break
             if not tok:
                 break
             tokenFormatted = Token(tok.type, tok.value, tok.lineno, tok.lexpos)
