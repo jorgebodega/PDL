@@ -35,17 +35,17 @@ class AnLex(object):
     tokens = (
         # Operadores (+, ++, -, ==, !=, &&, ,, =, ;, {, }, (, ))
         'op_suma', 'op_posinc', 'op_resta', 'op_igual', 'op_noigual',
-        'op_and', 'op_coma', 'op_asignacion', 'op_ptocoma', 'op_corchab',
-        'op_corchcer', 'op_parenab', 'op_parencer',
+        'op_and', 'op_coma', 'op_asignacion', 'op_ptocoma', 'op_llaveab',
+        'op_llavecer', 'op_parenab', 'op_parencer',
 
         # Otros (identificador, palabra reservada, cadena de texto, entero)
         'ID', 'PR', 'cadena', 'entero'
     )
 
     palabras_reservadas = (
-        # Palabras reservadas de nuesto lenguaje
+        # Palabras reservadas de nuestro lenguaje
         'true', 'false', 'var', 'function', 'int', 'bool', 'string',
-        'print', 'prompt', 'return', 'for', 'break', 'if'
+        'print', 'prompt', 'return', 'for', 'if'
     )
 
     id = []
@@ -87,11 +87,11 @@ class AnLex(object):
         r';'
         t.value = '-'
         return t
-    def t_op_corchab(self, t):
+    def t_op_llaveab(self, t):
         r'{'
         t.value = '-'
         return t
-    def t_op_corchcer(self, t):
+    def t_op_llavecer(self, t):
         r'}'
         t.value = '-'
         return t
@@ -108,9 +108,10 @@ class AnLex(object):
     t_ignore = ' \t\n'
     t_ignore_COMMENT = r'/{2}[ |\w|\W]+'
 
-    def __init__(self, fs, fe):
+    def __init__(self, fs, fe, ts):
         self.fichero_salida = fs
         self.fichero_error = fe
+        self.tabla_simbolos = ts
         self.__errorCheck = False
         self.lexer = None
 
@@ -125,7 +126,9 @@ class AnLex(object):
             return t
         # Si el numero no se encuentra en el rango permitido, marcamos el error
         # t.lexer.skip(1)
-        self.fichero_salida.write("Illegal number '%i': Out of Bounds\n" % valor_entero)
+        mensaje_error = "Error Lexico: Illegal number '%i': Out of Bounds\n" % valor_entero
+        self.fichero_error.write(mensaje_error)
+        self.__errorCheck = True
 
     def t_PR(self, t):
         r'([a-z]|[A-Z])(\w|\_)*'
@@ -146,6 +149,7 @@ class AnLex(object):
             return t
         except ValueError:
             self.id.append(t.value)
+            self.tabla_simbolos.insertarLexema(t.value)
             t.value = len(self.id)
             t.type = 'ID'
             return t
@@ -157,9 +161,8 @@ class AnLex(object):
 
     # Manejo de errores (No debería aparecer ninguno)
     def t_error(self, t):
-        mensaje_error = 'Carácter no permitido en linea %d -> "%s"' % ( t.lineno, t.value[0])
+        mensaje_error = 'Error Lexico: Illegal Character in line %d -> "%s"' % ( t.lineno, t.value[0])
         self.fichero_error.write(mensaje_error)
-        # print(mensaje_error)
         self.__errorCheck = True
 
     # Build the lexer
@@ -186,3 +189,6 @@ class AnLex(object):
             tokens.append(tokenFormatted)
         self.lexer.lineno += 1
         return tokens
+
+    def lineaActual(self):
+        return self.lexer.lineno

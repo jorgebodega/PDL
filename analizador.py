@@ -1,10 +1,14 @@
-import lexico, os
+import os
+import lexico
+import tabla
 
 fichero_codigo = open('code.js', 'r')
+fichero_ts = open('tabla_simbolos.txt', 'w')
 fichero_salida = open('tokens.txt', 'w')
 fichero_error = open('error.txt', 'w')
 
-lexer = lexico.AnLex(fs=fichero_salida, fe=fichero_error)
+tablaSimbolos = tabla.TablaSimbolos()
+lexer = lexico.AnLex(fs=fichero_salida, fe=fichero_error, ts=tablaSimbolos)
 lexer.build()
 
 tokensTotales = []
@@ -20,11 +24,14 @@ fichero_error.close()
 # Si no hemos tenido errores
 if not lexer.getErrorCheck():
     # Insertamos el token de fin de fichero
-    tokenEOF = lexico.Token('fin_fich', 'eof', None, None)
+    tokenEOF = lexico.Token('fin_fich', 'eof', lexer.lineaActual(), 0)
     fichero_salida.write(str(tokenEOF))
     tokensTotales.append([tokenEOF])
 
+fichero_ts.write(str(tablaSimbolos))
+
 # Cerramos descriptor de fichero
+fichero_ts.close()
 fichero_salida.close()
 
 if os.stat('error.txt').st_size == 0:
