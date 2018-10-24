@@ -1,4 +1,4 @@
-// Probamos algunas palabras reservadas en nuestro codigo pero creamos mal la variable
+// Creamos mal la variable
 var int _j = a + b;
 var int i
 prompt[i]

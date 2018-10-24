@@ -126,7 +126,7 @@ class AnLex(object):
             return t
         # Si el numero no se encuentra en el rango permitido, marcamos el error
         # t.lexer.skip(1)
-        mensaje_error = "Error Lexico: Illegal number '%i': Out of Bounds\n" % valor_entero
+        mensaje_error = "Error Lexico (Linea %d): Numero no permitido '%i': Fuera de los limites\n" % (t.lineno, valor_entero)
         self.fichero_error.write(mensaje_error)
         self.__errorCheck = True
 
@@ -161,7 +161,7 @@ class AnLex(object):
 
     # Manejo de errores (No debería aparecer ninguno)
     def t_error(self, t):
-        mensaje_error = 'Error Lexico: Illegal Character in line %d -> "%s"' % ( t.lineno, t.value[0])
+        mensaje_error = 'Error Lexico (Linea %d): Caracter no permitido "%s"' % ( t.lineno, t.value[0])
         self.fichero_error.write(mensaje_error)
         self.__errorCheck = True
 

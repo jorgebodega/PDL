@@ -1,0 +1,1 @@
+Error Lexico (Linea 3): Caracter no permitido "["

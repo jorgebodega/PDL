@@ -1,0 +1,9 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+* LEXEMA: 'textoPrueba'
+--------------------
+* LEXEMA: 'enteroPrueba'
+--------------------
+* LEXEMA: 'boolPrueba'
+--------------------
+==============================

@@ -1,4 +1,4 @@
-// Probamos algunas palabras reservadas en nuestro codigo
+// Probamos algunas palabras reservadas
 var int j__j_ = a + b;
 var int i
 prompt(i)

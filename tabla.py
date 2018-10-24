@@ -9,8 +9,9 @@ class TablaSimbolos:
 
     def __init__(self):
         self.__dictInterno = {
-            'TSGeneral': []
+            '1': []
         }
+        self.inicio = 2
 
     def __str__(self):
         contenido = ''
@@ -24,7 +25,7 @@ class TablaSimbolos:
         return contenido
 
     def insertarFuncion(self, lexema):
-        nombreTabla = 'TS_' + lexema
+        nombreTabla = '' + lexema
         self.__dictInterno[nombreTabla] = []
 
     def insertarLexema(self, lexema, tabla='TSGeneral'):

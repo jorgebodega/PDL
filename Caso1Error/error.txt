@@ -1,0 +1,1 @@
+Error Lexico (Linea 5): Caracter no permitido "*"

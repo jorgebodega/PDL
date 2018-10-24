@@ -1,0 +1,10 @@
+<PR, 4>
+<PR, 5>
+<ID, 1>
+<op_parenab, ->
+<PR, 5>
+<ID, 2>
+<op_coma, ->
+<PR, 5>
+<ID, 3>
+<op_parencer, ->
