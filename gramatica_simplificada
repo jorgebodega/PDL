@@ -1,0 +1,27 @@
+S0 -> S
+S -> A ; S | D ; S | C S | F S | ε
+D -> var D1 id
+D1 -> int | bool | String
+D2 -> D1 | ε
+A -> id E2
+A1 -> A | ε
+A2 -> id A3 | ε
+A3 -> = E | ++
+A4 -> C A4 | D ; A4 | A ; A4 | ε
+C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;
+F -> function D2 id ( F1 ) { C }
+F1 -> F2 F3
+F2 -> D | id | ε
+F3 -> , F1 | ε
+S1 -> print ( E ) | prompt ( id ) | return E1
+E -> G E2
+E1 -> E | ε
+E2 -> && E | ε
+G -> H G1
+G1 -> == G | != G | ε
+H -> I H1
+H1 -> + H | - H | ε
+I -> id J | ( E ) | entero | cadena | True | False
+J -> ++ | ( Z ) | ε
+Z -> id Z1 | ε
+Z1 -> , id Z1 | ε

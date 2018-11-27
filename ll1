@@ -1,0 +1,19 @@
+S -> {id} ∩ {var} ∩ {if, for, print, prompt, return} ∩ {function} ∩ {$} = Ø
+D1 -> {int} ∩ {bool} ∩ {String} = Ø
+D2 -> {int, bool, String} ∩ {id} = Ø
+A1 -> {id} ∩ {;} = Ø
+A2 -> {id} ∩ {)} = Ø
+A3 -> {=} ∩ {++} = Ø
+A4 -> {if, for, print, prompt, return} ∩ {var} ∩ {id} ∩ {}} = Ø
+C -> {if} ∩ {for} ∩ {print, prompt, return} = Ø
+F2 -> {int, bool, String} ∩ {,, )} = Ø
+F3 -> {,} ∩ {)} = Ø
+S1 -> {print} ∩ {prompt} ∩ {return} = Ø
+E1 -> {id, (, entero, cadena, True, False} ∩ {;} = Ø
+E2 -> {&&} ∩ {;, )} = Ø
+G1 -> {==} ∩ {!=} ∩ {&&, =, ++, ), ;} = Ø
+H1 -> {+} ∩ {-} ∩ {==, !=, &&, =, ++, ), ;} = Ø
+I -> {id} ∩ {(} ∩ {entero} ∩ {cadena} ∩ {True} ∩ {False} = Ø
+J -> {++} ∩ {(} ∩ {+, -, ==, !=, &&, ), ;} = Ø
+Z -> {id} ∩ {)} = Ø
+Z1 -> {,} ∩ {)} = Ø

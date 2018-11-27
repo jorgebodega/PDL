@@ -1,0 +1,61 @@
+S0 -> S
+S -> A ; S 
+S -> D ; S 
+S -> C S
+S -> F S
+S -> ε
+D -> var D1 id
+D1 -> int 
+D1 -> bool
+D1 -> String
+D2 -> D1
+D2 -> ε
+A -> id E2
+A1 -> A
+A1 -> ε
+A2 -> id A3
+A2 -> ε
+A3 -> = E
+A3 -> ++
+A4 -> C A4
+A4 -> D ; A4
+A4 -> A ; A4
+A4 -> ε
+C -> if ( E ) S1 ;
+C -> for ( A1 ; E ; A2 ) { A4 }
+C -> S1 ;
+F -> function D2 id ( F1 ) { C }
+F1 -> F2 F3
+F2 -> D1 id
+F2 -> ε
+F3 -> , F1
+F3 -> ε
+S1 -> print ( E )
+S1 -> prompt ( id )
+S1 -> return E1
+E -> G E2
+E1 -> E
+E1 -> ε
+E2 -> && E
+E2 -> ε
+G -> H G1
+G1 -> == G
+G1 -> != G
+G1 -> ε
+H -> I H1
+H1 -> + H
+H1 -> - H
+H1 -> ε
+I -> id J
+I -> ( E )
+I -> entero
+I -> cadena
+I -> True
+I -> False
+J -> ++
+J -> ( Z )
+J -> ε
+Z -> id Z1
+Z -> ε
+Z1 -> , id Z1
+Z1 -> ε
