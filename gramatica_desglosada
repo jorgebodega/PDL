@@ -4,12 +4,6 @@ S -> D ; S
 S -> C S
 S -> F S
 S -> ε
-D -> var D1 id
-D1 -> int 
-D1 -> bool
-D1 -> String
-D2 -> D1
-D2 -> ε
 A -> id E2
 A1 -> A
 A1 -> ε
@@ -21,6 +15,12 @@ A4 -> C A4
 A4 -> D ; A4
 A4 -> A ; A4
 A4 -> ε
+D -> var D1 id
+D1 -> int 
+D1 -> bool
+D1 -> String
+D2 -> D1
+D2 -> ε
 C -> if ( E ) S1 ;
 C -> for ( A1 ; E ; A2 ) { A4 }
 C -> S1 ;

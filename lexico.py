@@ -15,7 +15,7 @@ class Token(object):
     """
 
     def __init__(self, tipo, valor, linea, columna):
-        self.tipo = tipo
+        self.tipo = str(tipo)
         self.valor = valor
         self.linea = linea
         self.columna = columna
@@ -108,20 +108,22 @@ class AnLex(object):
     t_ignore = ' \t\n'
     t_ignore_COMMENT = r'/{2}[ |\w|\W]+'
 
-    def __init__(self, fs, fe, ts):
+    def __init__(self, fs, fe):
         self.fichero_salida = fs
         self.fichero_error = fe
-        self.tabla_simbolos = ts
         self.__errorCheck = False
         self.lexer = None
+
+    def getPalRes(self):
+        return self.palabras_reservadas
 
     def getErrorCheck(self):
         return self.__errorCheck
 
     def t_entero(self, t):
-        r'\d+|\-{1}\d+'
+        r'\d+'
         valor_entero = int(t.value)
-        if -32767 <= valor_entero <= 32767:
+        if valor_entero <= 32767:
             t.value = int(t.value)
             return t
         # Si el numero no se encuentra en el rango permitido, marcamos el error
@@ -149,7 +151,6 @@ class AnLex(object):
             return t
         except ValueError:
             self.id.append(t.value)
-            self.tabla_simbolos.insertarLexema(t.value)
             t.value = len(self.id)
             t.type = 'ID'
             return t

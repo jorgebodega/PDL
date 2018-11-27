@@ -1,13 +1,13 @@
 S0 -> S
 S -> A ; S | D ; S | C S | F S | ε
-D -> var D1 id
-D1 -> int | bool | String
-D2 -> D1 | ε
 A -> id E2
 A1 -> A | ε
 A2 -> id A3 | ε
 A3 -> = E | ++
 A4 -> C A4 | D ; A4 | A ; A4 | ε
+D -> var D1 id
+D1 -> int | bool | String
+D2 -> D1 | ε
 C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;
 F -> function D2 id ( F1 ) { C }
 F1 -> F2 F3
