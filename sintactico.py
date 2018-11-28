@@ -1,10 +1,9 @@
-import os
-import lexico
 import tabla
 
 class AnSit:
 
-    def __init__(self, analizador, f_c, f_t, f_p, f_e):
+    def __init__(self, analizador, f_c, f_t, f_p, f_e, flagImprimir = False):
+        self.flag = flagImprimir
         self.analizador = analizador
         self.fichero_codigo = f_c
         self.fichero_tablas = f_t
@@ -16,134 +15,332 @@ class AnSit:
         self.palRes = analizador.getPalRes()
         self.tablaSimbolos = tabla.TablaSimbolos()
         self.analizador.build()
-        self.getNewTokens()
 
     def S0(self):
-        '''S0 -> S'''
+        print('S0 -> S' if self.flag else '')
         self.parse += '1 '
         self.S()
     def S(self):
-        '''S -> A ; S | D ; S | C S | F S | ε'''
-        # Comprobamos si el siguiente token esta en el first del no terminal
-        if self.tokens[self.ptrTokens].tipo == 'PR':
-            if self.palRes[self.tokens[self.ptrTokens].valor] in ['id']:
-                self.parse += '2 '
-                self.A()
-                self.checkToken('op_ptocoma')
-                self.S()
-            if self.palRes[self.tokens[self.ptrTokens].valor] in ['var']:
+        print('S -> A ; S | D ; S | C S | F S | λ' if self.flag else '')
+        if self.ptrTokens == len(self.tokens):
+            self.parse += '6 '
+        elif self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '2 '
+            self.A()
+            self.checkToken('op_ptocoma')
+            self.S()
+        elif self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'var':
                 self.parse += '3 '
                 self.D()
                 self.checkToken('op_ptocoma')
                 self.S()
-            if self.palRes[self.tokens[self.ptrTokens].valor] in ['if', 'for', 'print', 'prompt', 'return']:
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['if', 'for', 'print', 'prompt', 'return']:
                 self.parse += '4 '
                 self.C()
                 self.S()
-            if self.palRes[self.tokens[self.ptrTokens].valor] in ['function']:
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'function':
                 self.parse += '5 '
                 self.F()
                 self.S()
-        else:
-            pass
     def A(self):
-        '''A -> id E2'''
+        print('A -> id = E' if self.flag else '')
         self.parse += '7 '
         self.checkToken('ID')
-        self.E2()
+        self.checkToken('op_asignacion')
+        self.E()
     def A1(self):
-        '''A1 -> A | ε'''
+        print('A1 -> A | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '8 '
+            self.A()
+        else:
+            self.parse += '9 '
     def A2(self):
-        '''A2 -> id A3 | ε'''
+        print('A2 -> id A3 | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '10 '
+            self.checkToken('ID')
+            self.A3()
+        else:
+            self.parse += '11 '
     def A3(self):
-        '''A3 -> = E | ++'''
+        print('A3 -> = E | ++' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_asignacion':
+            self.parse += '12 '
+            self.checkToken('op_asignacion')
+            self.E()
+        elif self.tokens[self.ptrTokens].tipo == 'op_posinc':
+            self.parse += '13 '
+            self.checkToken('op_posinc')
     def A4(self):
-        '''A4 -> C A4 | D ; A4 | A ; A4 | ε'''
+        print('A4 -> C A4 | D ; A4 | A ; A4 | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['if', 'for', 'print', 'prompt', 'return']:
+                self.parse += '14 '
+                self.C()
+                self.A4()
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'var':
+                self.parse += '15 '
+                self.D()
+                self.checkToken('op_ptocoma')
+                self.A4()
+        elif self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '16 '
+            self.A()
+            self.checkToken('op_ptocoma')
+            self.A4()
+        else:
+            self.parse += '17 '
     def D(self):
-        '''D -> var D1 id'''
+        print('D -> var D1 id' if self.flag else '')
+        self.parse += '18 '
+        self.checkToken('PR', 'var')
+        self.D1()
+        self.checkToken('ID')
     def D1(self):
-        '''D1 -> int | bool | String'''
+        print('D1 -> int | bool | String' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'int':
+                self.parse += '19 '
+                self.checkToken('PR', 'int')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'bool':
+                self.parse += '20 '
+                self.checkToken('PR', 'bool')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'String':
+                self.parse += '21 '
+                self.checkToken('PR', 'String')
     def D2(self):
-        '''D2 -> D1 | ε'''
+        print('D2 -> D1 | λ' if self.flag else '')
+        print(self.palRes[self.tokens[self.ptrTokens].valor - 1])
+        firstD1 = self.tokens[self.ptrTokens].tipo == 'PR' and \
+                  self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['int', 'bool', 'String']
+        if firstD1:
+            self.parse += '22 '
+            self.D1()
+        else:
+            self.parse += '23 '
     def C(self):
-        '''C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;'''
+        print('C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'if':
+                self.parse += '24 '
+                self.checkToken('PR', 'if')
+                self.checkToken('op_parenab')
+                self.E()
+                self.checkToken('op_parencer')
+                self.S1()
+                self.checkToken('op_ptocoma')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'for':
+                self.parse += '25 '
+                self.checkToken('PR', 'for')
+                self.checkToken('op_parenab')
+                self.A1()
+                self.checkToken('op_ptocoma')
+                self.E()
+                self.checkToken('op_ptocoma')
+                self.A2()
+                self.checkToken('op_parencer')
+                self.checkToken('op_llaveab')
+                self.A4()
+                self.checkToken('op_llavecer')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['print', 'prompt', 'return']:
+                self.parse += '26 '
+                self.S1()
+                self.checkToken('op_ptocoma')
     def F(self):
-        '''F -> function D2 id ( F1 ) { C }'''
+        print('F -> function D2 id ( F1 ) { A4 }' if self.flag else '')
+        self.parse += '27 '
+        self.checkToken('PR', 'function')
+        self.D2()
+        self.checkToken('ID')
+        self.tablaSimbolos.insertarFuncion(self.analizador.getLexema(self.tokens[self.ptrTokens - 1].valor - 1))
+        self.checkToken('op_parenab')
+        self.F1()
+        self.checkToken('op_parencer')
+        self.checkToken('op_llaveab')
+        self.A4()
+        self.checkToken('op_llavecer')
+        self.tablaSimbolos.removeTabla()
     def F1(self):
-        '''F1 -> F2 F3'''
+        print('F1 -> F2 F3' if self.flag else '')
+        self.parse += '28 '
+        self.F2()
+        self.F3()
     def F2(self):
-        '''F2 -> D | id | ε'''
+        print('F2 -> D1 id | λ' if self.flag else '')
+        firstD1 = self.tokens[self.ptrTokens].tipo == 'PR' and self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['int', 'bool', 'String']
+        if firstD1:
+            self.parse += '29 '
+            self.D1()
+            self.checkToken('ID')
+        else:
+            self.parse += '30 '
     def F3(self):
-        '''F3 -> , F1 | ε'''
+        print('F3 -> , F1 | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_coma':
+            self.parse += '31 '
+            self.checkToken('op_coma')
+            self.F1()
+        else:
+            self.parse += '32 '
     def S1(self):
-        '''S1 -> print ( E ) | prompt ( id ) | return E1'''
+        print('S1 -> print ( E ) | prompt ( id ) | return E1' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'print':
+                self.parse += '33 '
+                self.checkToken('PR', 'print')
+                self.checkToken('op_parenab')
+                self.E()
+                self.checkToken('op_parencer')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'prompt':
+                self.parse += '34 '
+                self.checkToken('PR', 'prompt')
+                self.checkToken('op_parenab')
+                self.checkToken('ID')
+                self.checkToken('op_parencer')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'return':
+                self.parse += '35 '
+                self.checkToken('PR', 'return')
+                self.E1()
     def E(self):
-        '''E -> G E2'''
+        print('E -> G E2' if self.flag else '')
+        self.parse += '36 '
+        self.G()
+        self.E2()
     def E1(self):
-        '''E1 -> E | ε'''
+        print('E1 -> E | λ' if self.flag else '')
+        firstE = ((self.tokens[self.ptrTokens].tipo == 'PR' and
+                   self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['True', 'False']) or
+                  self.tokens[self.ptrTokens].tipo in ['op_parenab', 'entero', 'cadena'] or
+                  self.tokens[self.ptrTokens].tipo == 'ID')
+        if firstE:
+            self.parse += '37 '
+            self.E()
+        else:
+            self.parse += '38 '
     def E2(self):
-        '''E2 -> && E | ε'''
+        print('E2 -> && E | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_and':
+            self.parse += '39 '
+            self.checkToken('op_and')
+            self.E()
+        else:
+            self.parse += '40 '
     def G(self):
-        '''G -> H G1'''
+        print('G -> H G1' if self.flag else '')
+        self.parse += '41 '
+        self.H()
+        self.G1()
     def G1(self):
-        '''G1 -> == G | != G | ε'''
+        print('G1 -> == G | != G | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_igual':
+            self.parse += '42 '
+            self.checkToken('op_igual')
+            self.G()
+        elif self.tokens[self.ptrTokens].tipo == 'op_noigual':
+            self.parse += '43 '
+            self.checkToken('op_noigual')
+            self.G()
+        else:
+            self.parse += '44 '
     def H(self):
-        '''H -> I H1'''
+        print('H -> I H1' if self.flag else '')
+        self.parse += '45 '
+        self.I()
+        self.H1()
     def H1(self):
-        '''H1 -> + H | - H | ε'''
+        print('H1 -> + H | - H | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_suma':
+            self.parse += '46 '
+            self.checkToken('op_suma')
+            self.H()
+        elif self.tokens[self.ptrTokens].tipo == 'op_resta':
+            self.parse += '47 '
+            self.checkToken('op_resta')
+            self.H()
+        else:
+            self.parse += '48 '
     def I(self):
-        '''I -> id J | ( E ) | entero | cadena | True | False'''
+        print('I -> id J | ( E ) | entero | cadena | True | False' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '49 '
+            self.checkToken('ID')
+            self.J()
+        elif self.tokens[self.ptrTokens].tipo == 'op_parenab':
+            self.parse += '50 '
+            self.checkToken('op_parenab')
+            self.E()
+            self.checkToken('op_parencer')
+        elif self.tokens[self.ptrTokens].tipo == 'entero':
+            self.parse += '51 '
+            self.checkToken('entero')
+        elif self.tokens[self.ptrTokens].tipo == 'cadena':
+            self.parse += '52 '
+            self.checkToken('cadena')
+        elif self.tokens[self.ptrTokens].tipo == 'PR':
+            if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'True':
+                self.parse += '53 '
+                self.checkToken('PR', 'True')
+            elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'False':
+                self.parse += '54 '
+                self.checkToken('PR', 'False')
     def J(self):
-        '''J -> ++ | ( Z ) | ε'''
+        print('J -> ++ | ( Z ) | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_posinc':
+            self.parse += '55 '
+            self.checkToken('op_posinc')
+        elif self.tokens[self.ptrTokens].tipo == 'op_parenab':
+            self.parse += '56 '
+            self.checkToken('op_parenab')
+            self.Z()
+            self.checkToken('op_parencer')
+        else:
+            self.parse += '57 '
     def Z(self):
-        '''Z -> id Z1 | ε'''
+        print('Z -> id Z1 | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'ID':
+            self.parse += '58 '
+            self.checkToken('ID')
+            self.Z1()
+        else:
+            self.parse += '59 '
     def Z1(self):
-        '''Z1 -> , id Z1 | ε'''
+        print('Z1 -> , id Z1 | λ' if self.flag else '')
+        if self.tokens[self.ptrTokens].tipo == 'op_coma':
+            self.parse += '60 '
+            self.checkToken('op_coma')
+            self.checkToken('ID')
+            self.Z1()
+        else:
+            self.parse += '61 '
 
+    def analize(self):
+        self.getNewTokens()
+        self.S0()
+        self.fichero_parse.write(self.parse)
+        self.fichero_tablas.write(str(self.tablaSimbolos))
     def getNewTokens(self):
         newLine = self.fichero_codigo.readline()
-        if newLine is None:
-            tokenEOF = lexico.Token('fin_fich', 'eof', lexer.lineaActual(), 0)
-            fichero_salida.write(str(tokenEOF))
-            self.tokens.append(tokenEOF)
-        else:
-            newTokens = lexer.tokenizeLine(newLine)
-            for token in newTokens:
-                self.tokens.append(token)
-
-    def checkToken(self, tipo):
+        if len(newLine) != 0:
+            newTokens = self.analizador.tokenizeLine(newLine)
+            if (len(newTokens) != 0):
+                for token in newTokens:
+                    self.tokens.append(token)
+            else: self.getNewTokens()
+    def checkToken(self, tipo, possibleValue = None):
         if self.tokens[self.ptrTokens].tipo == tipo:
-            self.ptrTokens += 1
-            if self.ptrTokens == len(self.tokens):
-                self.getNewTokens()
+            if self.tokens[self.ptrTokens].tipo == 'ID':
+                self.tablaSimbolos.insertarLexema(self.analizador.getLexema(self.tokens[self.ptrTokens].valor - 1))
+            if possibleValue is None or self.palRes[self.tokens[self.ptrTokens].valor - 1] == possibleValue:
+                self.ptrTokens += 1
+                if self.ptrTokens == len(self.tokens):
+                    self.getNewTokens()
+            else:
+                error = 'Error Sintactico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1, str(self.tokens[self.ptrTokens]))
+                self.fichero_error.write(error)
+                exit()
         else:
-            pass
-            # Lanzar error
-            # Error_Sin()
-
-# Puntero a los ficheros que iremos creando o usando
-fichero_codigo = open('code.js', 'r')
-fichero_salida = open('tokens.txt', 'w')
-fichero_ts = open('tabla_simbolos.txt', 'w')
-fichero_parse = open('parse.txt', 'w')
-fichero_error = open('error.txt', 'w')
-
-# Inicializamos el Analizador Lexico
-lexer = lexico.AnLex(fs=fichero_salida, fe=fichero_error)
-yacc = AnSit(lexer, fichero_codigo, fichero_ts, fichero_parse, fichero_error)
-
-# Cerramos descriptores de ficheros
-fichero_codigo.close()
-fichero_error.close()
-
-fichero_ts.write(str(yacc.tablaSimbolos))
-fichero_parse.write(yacc.parse)
-
-# Cerramos descriptor de fichero
-fichero_ts.close()
-fichero_salida.close()
-fichero_parse.close()
-
-if os.stat('error.txt').st_size == 0:
-    os.remove('error.txt')
-
+            error = 'Error Sintactico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1, str(self.tokens[self.ptrTokens]))
+            self.fichero_error.write(error)
+            exit()

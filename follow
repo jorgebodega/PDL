@@ -1,0 +1,28 @@
+#	            Sets
+S0	            $
+S	            $
+A	            ;
+A1	            ;
+A2	            )
+A3	            )
+A4	            }
+D	            ;
+D1	            id
+D2	            id
+C	            id, var, if, for, function, print, prompt, return, $, }
+F	            id, var, if, for, function, print, prompt, return, $
+F1	            )
+F2	            ,, )
+F3	            )
+S1	            ;
+E	            ;, )
+E1	            ;
+E2	            ;, )
+G	            &&, ;, )
+G1	            &&, ;, )
+H	            ==, !=, &&, ;, )
+H1	            ==, !=, &&, ;, )
+I	            +, -, ==, !=, &&, ;, )
+J	            +, -, ==, !=, &&, ;, )
+Z	            )
+Z1	            )

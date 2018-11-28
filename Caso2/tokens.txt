@@ -12,6 +12,8 @@
 <PR, 3>
 <PR, 5>
 <ID, 4>
+<op_ptocoma, ->
+<ID, 4>
 <op_asignacion, ->
 <ID, 2>
 <op_suma, ->
@@ -21,4 +23,7 @@
 <ID, 4>
 <op_ptocoma, ->
 <op_llavecer, ->
-<fin_fich, eof>
+<PR, 3>
+<PR, 7>
+<ID, 5>
+<op_ptocoma, ->

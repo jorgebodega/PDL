@@ -44,7 +44,7 @@ class AnLex(object):
 
     palabras_reservadas = (
         # Palabras reservadas de nuestro lenguaje
-        'true', 'false', 'var', 'function', 'int', 'bool', 'string',
+        'True', 'False', 'var', 'function', 'int', 'bool', 'String',
         'print', 'prompt', 'return', 'for', 'if'
     )
 
@@ -131,6 +131,7 @@ class AnLex(object):
         mensaje_error = "Error Lexico (Linea %d): Numero no permitido '%i': Fuera de los limites\n" % (t.lineno, valor_entero)
         self.fichero_error.write(mensaje_error)
         self.__errorCheck = True
+        exit()
 
     def t_PR(self, t):
         r'([a-z]|[A-Z])(\w|\_)*'
@@ -165,6 +166,7 @@ class AnLex(object):
         mensaje_error = 'Error Lexico (Linea %d): Caracter no permitido "%s"' % ( t.lineno, t.value[0])
         self.fichero_error.write(mensaje_error)
         self.__errorCheck = True
+        exit()
 
     # Build the lexer
     def build(self, **kwargs):
@@ -193,3 +195,6 @@ class AnLex(object):
 
     def lineaActual(self):
         return self.lexer.lineno
+
+    def getLexema(self, index):
+        return self.id[index]

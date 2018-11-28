@@ -1,5 +1,6 @@
-// Creamos mal la variable
-var int _j = a + b;
-var int i
-prompt[i]
-print("El usuario ha escrito -> " + i)
+// Probamos algunas palabras reservadas
+var int j__j_;
+j__j_= a + b;
+var int i;
+prompt(i);
+if (j__j_ && i && i) j__j_= b + a;

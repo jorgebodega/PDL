@@ -1,6 +1,8 @@
 <PR, 3>
 <PR, 5>
 <ID, 1>
+<op_ptocoma, ->
+<ID, 1>
 <op_asignacion, ->
 <ID, 2>
 <op_suma, ->
@@ -9,14 +11,24 @@
 <PR, 3>
 <PR, 5>
 <ID, 4>
+<op_ptocoma, ->
 <PR, 9>
 <op_parenab, ->
 <ID, 4>
 <op_parencer, ->
-<PR, 8>
+<op_ptocoma, ->
+<PR, 12>
 <op_parenab, ->
-<cadena, El usuario ha escrito -> >
-<op_suma, ->
+<ID, 1>
+<op_and, ->
+<ID, 4>
+<op_and, ->
 <ID, 4>
 <op_parencer, ->
-<fin_fich, eof>
+<PR, 8>
+<op_parenab, ->
+<ID, 1>
+<op_and, ->
+<ID, 4>
+<op_parencer, ->
+<op_ptocoma, ->

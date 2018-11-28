@@ -8,3 +8,17 @@
 <PR, 5>
 <ID, 3>
 <op_parencer, ->
+<op_llaveab, ->
+<PR, 3>
+<ID, 4>
+<op_ptocoma, ->
+<ID, 4>
+<op_asignacion, ->
+<ID, 2>
+<op_suma, ->
+<ID, 3>
+<op_ptocoma, ->
+<PR, 10>
+<ID, 4>
+<op_ptocoma, ->
+<op_llavecer, ->

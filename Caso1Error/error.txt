@@ -1,1 +1,1 @@
-Error Lexico (Linea 5): Caracter no permitido "*"
+Error Sintactico (Linea 7): Token <PR, 6> erroneo

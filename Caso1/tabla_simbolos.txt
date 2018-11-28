@@ -1,9 +1,16 @@
 CONTENIDO DE LA TABLA # TSGeneral
 
-* LEXEMA: 'textoPrueba'
+*	LEXEMA: 'textoPrueba'
+ 	ATRIBUTOS:
+		Prueba : Prueba
 --------------------
-* LEXEMA: 'enteroPrueba'
+*	LEXEMA: 'enteroPrueba'
+ 	ATRIBUTOS:
+		Prueba : Prueba
 --------------------
-* LEXEMA: 'boolPrueba'
+*	LEXEMA: 'boolPrueba'
+ 	ATRIBUTOS:
+		Prueba : Prueba
 --------------------
 ==============================
+

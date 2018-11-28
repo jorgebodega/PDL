@@ -1,5 +1,6 @@
 // Probamos algunas palabras reservadas
-var int j__j_ = a + b;
-var int i
-prompt(i)
-print("El usuario ha escrito -> " + i)
+var int j__j_;
+j__j_= a + b;
+var int i;
+prompt(i);
+if (j__j_ && i && i) print(j__j_ && i);

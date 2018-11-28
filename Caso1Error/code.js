@@ -1,5 +1,8 @@
 // incluimos un caracter
 // no detectado
-var string textoPrueba = "Prueba";
-var int enteroPrueba = 55;
-var bool boolPrueba *= true;
+var String textoPrueba;
+textoPrueba = "Prueba";
+var int enteroPrueba;
+enteroPrueba = 55;
+var bool bool boolPrueba;
+boolPrueba = true;

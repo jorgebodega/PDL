@@ -14,19 +14,17 @@ class TablaSimbolos:
         contenido = ''
         for tabla in self.__dictInterno:
             contenido += str(tabla)
-            contenido += '\n' + 30 * '=' + '\n'
+            contenido += 30 * '=' + '\n\n'
         return contenido
 
     def removeTabla(self):
         if self.ptrTabla != self.__dictInterno[0]:
-            self.__dictInterno.remove(self.ptrTabla)
             self.ptrTabla = self.__dictInterno[0]
 
     def insertarFuncion(self, lexema):
         self.ptrTabla.insertarFuncion(lexema)
-        self.__dictInterno.append(Tabla(lexema))
+        self.__dictInterno.append(Tabla('TS_' + lexema))
         self.ptrTabla = self.__dictInterno[-1]
-        self.ptrTabla.insertarLexema(lexema)
 
     def insertarLexema(self, lexema):
         self.ptrTabla.insertarLexema(lexema)
@@ -43,27 +41,28 @@ class Tabla:
         tabla = self.contenido
         for item in tabla:
             texto += '*\tLEXEMA: \'%s\'\n' % str(item['lexema'])
-            texto += ' \tATRIBUTOS:'
+            texto += ' \tATRIBUTOS:\n'
             for key in item['atributos'].keys():
-                texto += '\t\t%s : %s' % (str(key), str(item['atributos'][key]))
+                texto += '\t\t%s : %s\n' % (str(key), str(item['atributos'][key]))
             texto += 20 * '-' + '\n'
-        texto += 30 * '=' + '\n'
         return texto
 
     def insertarLexema(self, lexema):
-        self.lexemas.append(lexema)
-        self.contenido.append({
-            'lexema': lexema,
-            'atributos': [{
-                'Prueba': 'Prueba'
-            }]
-        })
+        if lexema not in self.lexemas:
+            self.lexemas.append(lexema)
+            self.contenido.append({
+                'lexema': lexema,
+                'atributos': {
+                    'Prueba': 'Prueba'
+                }
+            })
 
     def insertarFuncion(self, lexema):
-        self.lexemas.append(lexema)
-        self.contenido.append({
-            'lexema': lexema,
-            'atributos': [{
-                'Prueba': 'Prueba'
-            }]
-        })
+        if lexema not in self.lexemas:
+            self.lexemas.append(lexema)
+            self.contenido.append({
+                'lexema': lexema,
+                'atributos': {
+                    'Prueba': 'Prueba'
+                }
+            })
