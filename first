@@ -1,28 +1,27 @@
-#	            Sets
-S0	            ε, id, var, if, for, function, print, prompt, return
-S	            ε, id, var, if, for, function, print, prompt, return
-A	            id
-A1	            id, ε
-A2	            id, ε
-A3	            =, ++
-A4	            id, ε, if, for, var, print, prompt, return
-D	            var
-D1	            int, bool, String
-D2	            int, bool, String, ε
-C	            if, for, print, prompt, return
-F	            function
-F1	            int, bool, String, ,, ε
-F2	            int, bool, String, ε
-F3	            ,, ε
-S1	            print, prompt, return
-E	            id, (, entero, cadena, True, False
-E1	            ε, id, (, entero, cadena, True, False
-E2	            &&, ε
-G	            id, (, entero, cadena, True, False
-G1	            ==, !=, ε
-H	            id, (, entero, cadena, True, False
-H1	            +, -, ε
-I	            id, (, entero, cadena, True, False
-J	            ++, (, ε
-Z	            id, ε
-Z1	            ,, ε
+First(S0) = {ε, id, var, if, for, function, print, prompt, return}
+First(S) = {ε, id, var, if, for, function, print, prompt, return}
+First(A) = {id}
+First(A1) = {id, ε}
+First(A2) = {id, ε}
+First(A3) = {=, ++}
+First(A4) = {id, ε, if, for, var, print, prompt, return}
+First(D) = {var}
+First(D1) = {int, bool, String}
+First(D2) = {int, bool, String, ε}
+First(C) = {if, for, print, prompt, return}
+First(F) = {function}
+First(F1) = {int, bool, String, ,, ε}
+First(F2) = {int, bool, String, ε}
+First(F3) = {,, ε}
+First(S1) = {print, prompt, return}
+First(E) = {id, (, entero, cadena, True, False}
+First(E1) = {ε, id, (, entero, cadena, True, False}
+First(E2) = {&&, ε}
+First(G) = {id, (, entero, cadena, True, False}
+First(G1) = {==, !=, ε}
+First(H) = {id, (, entero, cadena, True, False}
+First(H1) = {+, -, ε}
+First(I) = {id, (, entero, cadena, True, False}
+First(J) = {++, (, ε}
+First(Z) = {id, ε}
+First(Z1) = {,, ε}

@@ -1,28 +1,27 @@
-#	            Sets
-S0	            $
-S	            $
-A	            ;
-A1	            ;
-A2	            )
-A3	            )
-A4	            }
-D	            ;
-D1	            id
-D2	            id
-C	            id, var, if, for, function, print, prompt, return, $, }
-F	            id, var, if, for, function, print, prompt, return, $
-F1	            )
-F2	            ,, )
-F3	            )
-S1	            ;
-E	            ;, )
-E1	            ;
-E2	            ;, )
-G	            &&, ;, )
-G1	            &&, ;, )
-H	            ==, !=, &&, ;, )
-H1	            ==, !=, &&, ;, )
-I	            +, -, ==, !=, &&, ;, )
-J	            +, -, ==, !=, &&, ;, )
-Z	            )
-Z1	            )
+Follow(S0) = {$}
+Follow(S) = {$}
+Follow(A) = {;}
+Follow(A1) = {;}
+Follow(A2) = {)}
+Follow(A3) = {)}
+Follow(A4) = {}}
+Follow(D) = {;}
+Follow(D1) = {id}
+Follow(D2) = {id}
+Follow(C) = {id, var, if, for, function, print, prompt, return, $, }}
+Follow(F) = {id, var, if, for, function, print, prompt, return, $}
+Follow(F1) = {)}
+Follow(F2) = {,, )}
+Follow(F3) = {)}
+Follow(S1) = {;}
+Follow(E) = {;, )}
+Follow(E1) = {;}
+Follow(E2) = {;, )}
+Follow(G) = {&&, ;, )}
+Follow(G1) = {&&, ;, )}
+Follow(H) = {==, !=, &&, ;, )}
+Follow(H1) = {==, !=, &&, ;, )}
+Follow(I) = {+, -, ==, !=, &&, ;, )}
+Follow(J) = {+, -, ==, !=, &&, ;, )}
+Follow(Z) = {)}
+Follow(Z1) = {)}
