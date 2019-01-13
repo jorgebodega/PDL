@@ -7,8 +7,8 @@ TODO: Hay que añadir funcionalidad posteriormente, con el sintáctico y el sem�
 class TablaSimbolos:
 
     def __init__(self):
-        self.__dictInterno = [Tabla('TSGeneral')]
-        self.ptrTabla = self.__dictInterno[0]
+        self.__dictInterno = [] # Tecnicamente es una lista, pero no le cambie el nombre de la variable
+        self.ptrTabla = None
 
     def __str__(self):
         contenido = ''
@@ -17,24 +17,38 @@ class TablaSimbolos:
             contenido += 30 * '=' + '\n\n'
         return contenido
 
+    def init_ts(self):
+        """Inicializamos las tablas de simbolos con la tabla general."""
+        self.__dictInterno.append(Tabla('TSGeneral'))
+        self.ptrTabla = self.__dictInterno[0]
+
     def removeTabla(self):
+        """Movemos el puntero de la tabla actual a la tabla general."""
         if self.ptrTabla != self.__dictInterno[0]:
             self.ptrTabla = self.__dictInterno[0]
 
-    def insertarFuncion(self, lexema):
-        self.ptrTabla.insertarFuncion(lexema)
-        self.__dictInterno.append(Tabla('TS_' + lexema))
-        self.ptrTabla = self.__dictInterno[-1]
+    def comprobar_lexema(self, lexema):
+        return self.ptrTabla.comprobar_lexema(lexema)
 
-    def insertarLexema(self, lexema):
-        self.ptrTabla.insertarLexema(lexema)
+    def is_tablageneral(self):
+        return self.ptrTabla == self.__dictInterno[0]
+
+    def insertarFuncion(self, lexema):
+        self.ptrTabla.insertarFuncion(lexema)  # Insertamos la funcion en la tabla de simbolos apuntada.
+        self.__dictInterno.append(Tabla('TS_' + lexema))  # Insertamos una nueva tabla.
+        self.ptrTabla = self.__dictInterno[-1]  # Cambiamos el puntero a la nueva tabla.
+
+    def insertarLexema(self, lexema, size):
+        self.ptrTabla.insertarLexema(lexema, size)  # Insertamos el nuevo lexemana en la tabla de simbolos apuntada.
+
 
 class Tabla:
 
-    def __init__(self, nombreTabla):
-        self.nombre = nombreTabla
+    def __init__(self, nombre_tabla):
+        self.nombre = nombre_tabla
         self.lexemas = []
         self.contenido = []
+        self.desplazamiento = 0
 
     def __str__(self):
         texto = 'CONTENIDO DE LA TABLA # %s\n\n' % self.nombre
@@ -47,15 +61,20 @@ class Tabla:
             texto += 20 * '-' + '\n'
         return texto
 
-    def insertarLexema(self, lexema):
+    def comprobar_lexema(self, lexema):
+        return lexema in self.lexemas
+
+    def insertarLexema(self, lexema, size):
         if lexema not in self.lexemas:
             self.lexemas.append(lexema)
             self.contenido.append({
                 'lexema': lexema,
                 'atributos': {
-                    'Prueba': 'Prueba'
+                    'Prueba': 'Prueba',
+                    'Desplazamiento': self.desplazamiento
                 }
             })
+            self.desplazamiento += size
 
     def insertarFuncion(self, lexema):
         if lexema not in self.lexemas:
@@ -63,6 +82,8 @@ class Tabla:
             self.contenido.append({
                 'lexema': lexema,
                 'atributos': {
-                    'Prueba': 'Prueba'
+                    'Prueba': 'Prueba',
+                    'Desplazamiento': self.desplazamiento
                 }
             })
+            self.desplazamiento += 4 # Vamos a dar por hecho que los punteros son de 4 bytes

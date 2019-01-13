@@ -7,6 +7,7 @@ los devuelve en un array y escribe en un archivo.
 
 import library.lex as lex
 
+
 class Token(object):
     """
     Esta clase es una clase auxiliar para manejar los tokens.
@@ -25,6 +26,7 @@ class Token(object):
 
     def __repr__(self):
         return str(self)
+
 
 class AnLex(object):
     """

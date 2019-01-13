@@ -1,25 +1,33 @@
 import tabla
 
+
 class AnSit:
 
-    def __init__(self, analizador, f_c, f_t, f_p, f_e, flagImprimir = False):
-        self.flag = flagImprimir
+    def __init__(self, analizador, fichero_codigo, fichero_tablas,
+                 fichero_parse, fichero_error, flag_imprimir=False):
+        self.flag = flag_imprimir
         self.analizador = analizador
-        self.fichero_codigo = f_c
-        self.fichero_tablas = f_t
-        self.fichero_parse = f_p
-        self.fichero_error = f_e
+        self.fichero_codigo = fichero_codigo
+        self.fichero_tablas = fichero_tablas
+        self.fichero_parse = fichero_parse
+        self.fichero_error = fichero_error
         self.tokens = []
         self.ptrTokens = 0
         self.parse = 'Des '
         self.palRes = analizador.getPalRes()
-        self.tablaSimbolos = tabla.TablaSimbolos()
+        self.tabla_simbolos = tabla.TablaSimbolos()
         self.analizador.build()
 
     def S0(self):
         print('S0 -> S' if self.flag else '')
         self.parse += '1 '
+
+        # Semantico
+        self.tabla_simbolos.init_ts()
+        # Semantico
+
         self.S()
+
     def S(self):
         print('S -> A ; S | D ; S | C S | F S | λ' if self.flag else '')
         if self.ptrTokens == len(self.tokens):
@@ -43,6 +51,7 @@ class AnSit:
                 self.parse += '5 '
                 self.F()
                 self.S()
+
     def A(self):
         print('A -> id = E' if self.flag else '')
         self.parse += '7 '
@@ -100,26 +109,63 @@ class AnSit:
         self.checkToken('ID')
     def D1(self):
         print('D1 -> int | bool | String' if self.flag else '')
+
+        # Semantico
+        valor_retorno = None  # Valor por defecto a None
+        # Semantico
+
         if self.tokens[self.ptrTokens].tipo == 'PR':
             if self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'int':
                 self.parse += '19 '
                 self.checkToken('PR', 'int')
+
+                # Semantico
+                valor_retorno = ['entero', 4]  # Enteros de 4 bytes
+                # Semantico
+
             elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'bool':
                 self.parse += '20 '
                 self.checkToken('PR', 'bool')
+
+                # Semantico
+                valor_retorno = ['logico', 1]  # Booleanos de 1 byte
+                # Semantico
+
             elif self.palRes[self.tokens[self.ptrTokens].valor - 1] == 'String':
                 self.parse += '21 '
                 self.checkToken('PR', 'String')
+
+                # Semantico
+                valor_retorno = ['cadena', 4]  # Cadenas de 4 bytes (Provisionalmente)
+                # Semantico
+
+        # Semantico
+        return valor_retorno
+        # Semantico
+
     def D2(self):
         print('D2 -> D1 | λ' if self.flag else '')
-        print(self.palRes[self.tokens[self.ptrTokens].valor - 1])
+
+        # Semantico
+        valor_retorno = ['vacio', 0] # Valor por defecto a vacio -> void
+        # Semantico
+
         firstD1 = self.tokens[self.ptrTokens].tipo == 'PR' and \
                   self.palRes[self.tokens[self.ptrTokens].valor - 1] in ['int', 'bool', 'String']
         if firstD1:
             self.parse += '22 '
-            self.D1()
+
+            # Semantico
+            valor_retorno = self.D1()
+            # Semantico
+
         else:
             self.parse += '23 '
+
+        # Semantico
+        return valor_retorno
+        # Semantico
+
     def C(self):
         print('C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;' if self.flag else '')
         if self.tokens[self.ptrTokens].tipo == 'PR':
@@ -152,16 +198,35 @@ class AnSit:
         print('F -> function D2 id ( F1 ) { A4 }' if self.flag else '')
         self.parse += '27 '
         self.checkToken('PR', 'function')
-        self.D2()
+
+        # Semantico
+        tipo_retorno_funcion = self.D2()
+        # Semantico
+
         self.checkToken('ID')
-        self.tablaSimbolos.insertarFuncion(self.analizador.getLexema(self.tokens[self.ptrTokens - 1].valor - 1))
+
+        # Semantico
+        lexema = self.analizador.getLexema(self.tokens[self.ptrTokens - 1].valor - 1)
+        if not self.tabla_simbolos.comprobar_lexema(lexema):
+            self.error_semantico()
+        # No deberia llegar nunca a este error, no puede darse el caso
+        # elif not self.tabla_simbolos.is_tablageneral():
+        #     self.error_sintactico()
+        else:
+            self.tabla_simbolos.insertarFuncion(lexema)
+        # Semantico
+
         self.checkToken('op_parenab')
         self.F1()
         self.checkToken('op_parencer')
         self.checkToken('op_llaveab')
         self.A4()
         self.checkToken('op_llavecer')
-        self.tablaSimbolos.removeTabla()
+
+        # Semantico
+        self.tabla_simbolos.removeTabla()
+        # Semantico
+
     def F1(self):
         print('F1 -> F2 F3' if self.flag else '')
         self.parse += '28 '
@@ -319,7 +384,7 @@ class AnSit:
         self.getNewTokens()
         self.S0()
         self.fichero_parse.write(self.parse)
-        self.fichero_tablas.write(str(self.tablaSimbolos))
+        self.fichero_tablas.write(str(self.tabla_simbolos))
     def getNewTokens(self):
         newLine = self.fichero_codigo.readline()
         if len(newLine) != 0:
@@ -331,16 +396,24 @@ class AnSit:
     def checkToken(self, tipo, possibleValue = None):
         if self.tokens[self.ptrTokens].tipo == tipo:
             if self.tokens[self.ptrTokens].tipo == 'ID':
-                self.tablaSimbolos.insertarLexema(self.analizador.getLexema(self.tokens[self.ptrTokens].valor - 1))
+                self.tabla_simbolos.insertarLexema(self.analizador.getLexema(self.tokens[self.ptrTokens].valor - 1))
             if possibleValue is None or self.palRes[self.tokens[self.ptrTokens].valor - 1] == possibleValue:
                 self.ptrTokens += 1
                 if self.ptrTokens == len(self.tokens):
                     self.getNewTokens()
             else:
-                error = 'Error Sintactico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1, str(self.tokens[self.ptrTokens]))
-                self.fichero_error.write(error)
-                exit()
+                self.error_sintactico()
         else:
-            error = 'Error Sintactico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1, str(self.tokens[self.ptrTokens]))
-            self.fichero_error.write(error)
-            exit()
+            self.error_sintactico()
+
+    def error_sintactico(self):
+        error = 'Error Sintáctico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1,
+                                                                   str(self.tokens[self.ptrTokens]))
+        self.fichero_error.write(error)
+        exit()
+
+    def error_semantico(self):
+        error = 'Error Semántico (Linea %d): %s <definir errores>' % (self.analizador.lineaActual() - 1,
+                                                                      str(self.tokens[self.ptrTokens]))
+        self.fichero_error.write(error)
+        exit()

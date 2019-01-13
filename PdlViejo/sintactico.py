@@ -1055,7 +1055,6 @@ def T(): #t=[tipo,tamano]
 		#--Semantico Inicio
 		return [ "cadena", 2 ]
 		#--Semantico Fin
-
 	#--Sintactico Fin
 
 # A → T id K | 𝝺
