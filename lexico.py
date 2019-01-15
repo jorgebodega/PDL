@@ -116,9 +116,6 @@ class AnLex(object):
         self.__errorCheck = False
         self.lexer = None
 
-    def getPalRes(self):
-        return self.palabras_reservadas
-
     def getErrorCheck(self):
         return self.__errorCheck
 

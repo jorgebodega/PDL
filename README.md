@@ -37,6 +37,7 @@ Como se puede ver en la salida, va imprimiendo (___POR DEFECTO___) las reglas se
 
 Los ficheros de parse que estan en las carpetas son los que deben usarse en VAst
 
+http://docutils.sourceforge.net/docs/user/rst/quickref.html
 ### TODO LIST
 
 - __LEXICO__
