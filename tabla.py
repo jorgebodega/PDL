@@ -59,13 +59,13 @@ class TablaSimbolos:
         self.__tablas.append(Tabla(lexema))  # Creamos la nueva Tabla.
         self.__puntero_tabla = self.__tablas[-1]  # Cambiamos el puntero a la nueva tabla.
 
-    def insertar_lexema(self, lexema, size):
+    def insertar_lexema(self, lexema, tipo_dato, size):
         """
         Inserta el lexema nuevo en la tabla actualmente apuntada.
         :param lexema: Lexema a ser añadido.
         :param size: Tamaño del lexema.
         """
-        self.__puntero_tabla.insertar_lexema(lexema, size)
+        self.__puntero_tabla.insertar_lexema(lexema, tipo_dato, size)
 
 
 class Tabla:
