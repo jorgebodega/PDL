@@ -6,12 +6,13 @@ class TablaSimbolos:
     """
 
     def __init__(self):
-        self.__tablas = []
+        self.__tablas = {}
         self.__puntero_tabla = None
 
     def __str__(self):
         contenido = ''
-        for tabla in self.__tablas:
+        for nombre, tabla in self.__tablas:
+            contenido += 'CONTENIDO DE LA TABLA # %s\n\n' % nombre
             contenido += str(tabla)
             contenido += 30 * '=' + '\n\n'
         return contenido
@@ -22,7 +23,7 @@ class TablaSimbolos:
         Solo puede llamarse una vez, al inicio del problema.
         """
         if len(self.__tablas) == 0:
-            self.__tablas.append(Tabla('TSGeneral'))
+            self.__tablas['TSGeneral'] = Tabla()
             self.__puntero_tabla = self.__tablas[0]
 
     def remove_tabla(self):
@@ -31,8 +32,8 @@ class TablaSimbolos:
         Solo se permite este comportamiento porque el lenguaje no permite anidar funciones,
         con lo que no se crean subtablas de subtablas, nivel máximo de profundidad 1.
         """
-        if self.__puntero_tabla != self.__tablas[0]:
-            self.__puntero_tabla = self.__tablas[0]
+        if self.__puntero_tabla != self.__tablas['TSGeneral']:
+            self.__puntero_tabla = self.__tablas['TSGeneral']
 
     def comprobar_lexema(self, lexema):
         """
@@ -56,8 +57,8 @@ class TablaSimbolos:
         :param lexema: Lexema a ser añadido.
         """
         self.__puntero_tabla.insertar_funcion(lexema)
-        self.__tablas.append(Tabla(lexema))  # Creamos la nueva Tabla.
-        self.__puntero_tabla = self.__tablas[-1]  # Cambiamos el puntero a la nueva tabla.
+        self.__tablas[lexema] = Tabla()  # Creamos la nueva Tabla.
+        self.__puntero_tabla = self.__tablas[lexema]  # Cambiamos el puntero a la nueva tabla.
 
     def insertar_lexema(self, lexema, tipo_dato, size):
         """
@@ -74,13 +75,12 @@ class Tabla:
     buscar elementos, comprobar el tipo de estos o imprimir la informacion de la tabla.
     """
 
-    def __init__(self, nombre_tabla):
-        self.nombre = 'TS_' + nombre_tabla
+    def __init__(self):
         self.tabla = {}
         self.desplazamiento = 0
 
     def __str__(self):
-        texto = 'CONTENIDO DE LA TABLA # %s\n\n' % self.nombre
+        texto = ''
         for lexema, entrada in self.tabla:
             texto += '*\tLEXEMA: \'%s\'\n' % str(lexema)
             texto += ' \tATRIBUTOS:\n'
