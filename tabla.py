@@ -64,9 +64,19 @@ class TablaSimbolos:
         """
         Inserta el lexema nuevo en la tabla actualmente apuntada.
         :param lexema: Lexema a ser añadido.
+        :param tipo_dato: Tipo del dato que vamos a añadir.
         :param size: Tamaño del lexema.
         """
         self.__puntero_tabla.insertar_lexema(lexema, tipo_dato, size)
+
+    def insertar_lexema_global(self, lexema, tipo_dato, size):
+        """
+        Inserta el lexema nuevo en la tabla general.
+        :param lexema: Lexema a ser añadido.
+        :param tipo_dato: Tipo del dato que vamos a añadir.
+        :param size: Tamaño del lexema.
+        """
+        self.__tablas['TSGeneral'].insertar_lexema(lexema, tipo_dato, size)
 
 
 class Tabla:

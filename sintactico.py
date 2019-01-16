@@ -64,15 +64,16 @@ class AnSit:
         lexema = self.get_lexema()
         # print(lexema)
         if not self.tabla_simbolos.comprobar_lexema(lexema):
-            self.error_semantico()
-        tipo_lexema = self.tabla_simbolos.tipo_lexema(lexema)
+            self.tabla_simbolos.insertar_lexema_global(lexema, 'entero', 4)
+            tipo_lexema = 'entero'
+        else:
+            tipo_lexema = self.tabla_simbolos.tipo_lexema(lexema)
         # Semantico
 
         self.check_token('op_asignacion')
 
         # Semantico
-        retorno_e = self.e()
-        tipo_dato, size = retorno_e  # TODO: Posiblemente podemos adaptar el retorno y que no traiga el tamaño.
+        tipo_dato = self.e()
         if tipo_lexema != tipo_dato:
             self.error_semantico()
         # Semantico
@@ -92,7 +93,18 @@ class AnSit:
         if tipo_token == 'ID':
             self.parse += '10 '
             self.check_token('ID')
-            self.a3()
+
+            # Semantico
+            lexema = self.get_lexema()
+            if not self.tabla_simbolos.comprobar_lexema(lexema):
+                self.tabla_simbolos.insertar_lexema_global(lexema, 'entero', 4)
+                tipo_lexema = 'entero'
+            else:
+                tipo_lexema = self.tabla_simbolos.tipo_lexema(lexema)
+            tipo_retorno = self.a3()
+            if tipo_retorno != tipo_lexema:
+                self.error_semantico()
+            # Semantico
         else:
             self.parse += '11 '
 
@@ -102,10 +114,17 @@ class AnSit:
         if tipo_token == 'op_asignacion':
             self.parse += '12 '
             self.check_token('op_asignacion')
-            self.e()
-        elif tipo_token == 'op_posinc':
+
+            # Semantico
+            return self.e()
+            # Semantico
+        elif tipo_token == 'op_posinc':  # TODO Solo puede ejecutarse sobre una variable entera.
             self.parse += '13 '
             self.check_token('op_posinc')
+
+            # Semantico
+            return 'entero'
+            # Semantico
 
     def a4(self):
         print('A4 -> C A4 | D ; A4 | A ; A4 | λ' if self.flag else '')
@@ -311,7 +330,6 @@ class AnSit:
 
         tipo_tokens = self.get_tipo()
         if tipo_tokens == 'PR':
-
             palabra = self.get_palabra_reservada()
             if palabra == 'print':
                 self.parse += '33 '
@@ -324,6 +342,13 @@ class AnSit:
                 self.check_token('PR', 'prompt')
                 self.check_token('op_parenab')
                 self.check_token('ID')
+
+                # Semantico
+                tipo_lexema = self.get_tipo()
+                if not tipo_lexema in ['entero', 'cadena']:
+                    self.error_semantico()  # TODO Mensaje de error.
+                # Semantico
+
                 self.check_token('op_parencer')
             elif palabra == 'return':
                 self.parse += '35 '
