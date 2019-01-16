@@ -195,5 +195,24 @@ class AnLex(object):
     def lineaActual(self):
         return self.lexer.lineno
 
-    def getLexema(self, index):
-        return self.id[index]
+    def get_lexema(self, index):
+        """
+        Devuelve el lexema en la posicion indicada
+        :param index: Posicion a buscar
+        :return: Valor del lexema | None
+        """
+        valor = None
+        if index < len(self.id):
+            valor = self.id[index]
+        return valor
+
+    def get_palabra_reservada(self, index):
+        """
+        Devuelve el lexema en la posicion indicada
+        :param index: Posicion a buscar
+        :return: Valor del lexema | None
+        """
+        valor = None
+        if index < len(self.palabras_reservadas):
+            valor = self.palabras_reservadas[index]
+        return valor

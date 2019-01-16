@@ -57,8 +57,8 @@ class TablaSimbolos:
         :param lexema: Lexema a ser añadido.
         """
         self.__puntero_tabla.insertar_funcion(lexema)
-        self.__tablas[lexema] = Tabla()  # Creamos la nueva Tabla.
-        self.__puntero_tabla = self.__tablas[lexema]  # Cambiamos el puntero a la nueva tabla.
+        self.__tablas['TS_' + lexema] = Tabla()  # Creamos la nueva Tabla.
+        self.__puntero_tabla = self.__tablas['TS_' + lexema]  # Cambiamos el puntero a la nueva tabla.
 
     def insertar_lexema(self, lexema, tipo_dato, size):
         """
