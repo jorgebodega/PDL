@@ -25,10 +25,10 @@ C -> if ( E ) S1 ;
 C -> for ( A1 ; E ; A2 ) { A4 }
 C -> S1 ;
 F -> function D2 id ( F1 ) { A4 }
-F1 -> F2 F3
-F2 -> D1 id
-F2 -> ε
-F3 -> , F1
+F1 -> F2
+F1 -> ε
+F2 -> D1 id F3
+F3 -> , F2
 F3 -> ε
 S1 -> print ( E )
 S1 -> prompt ( id )
