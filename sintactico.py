@@ -13,7 +13,7 @@ class AnSit:
         self.fichero_error = fichero_error
         self.tokens = []
         self.puntero_tokens = 0
-        self.parse = 'Des '  # Analizador descendente recursivo
+        self.parse = 'Descendente '  # Analizador descendente recursivo
         self.palabras_reservadas = analizador.palabras_reservadas
         self.tabla_simbolos = tabla.TablaSimbolos()
         self.analizador.build()
