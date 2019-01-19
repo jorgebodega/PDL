@@ -6,9 +6,10 @@ A2 -> {id} ∩ {)} = Ø
 A3 -> {=} ∩ {++} = Ø
 A4 -> {if, for, print, prompt, return} ∩ {var} ∩ {id} ∩ {}} = Ø
 C -> {if} ∩ {for} ∩ {print, prompt, return} = Ø
-F2 -> {int, bool, String} ∩ {,, )} = Ø
+F1 -> {int, bool, String} ∩ {)} = Ø
 F3 -> {,} ∩ {)} = Ø
-S1 -> {print} ∩ {prompt} ∩ {return} = Ø
+S1 -> {print, prompt, return} ∩ {id} = Ø
+S2 -> {print} ∩ {prompt} ∩ {return} = Ø
 E1 -> {id, (, entero, cadena, True, False} ∩ {;} = Ø
 E2 -> {&&} ∩ {;, )} = Ø
 G1 -> {==} ∩ {!=} ∩ {&&, =, ++, ), ;} = Ø

@@ -8,12 +8,13 @@ A4 -> C A4 | D ; A4 | A ; A4 | λ
 D -> var D1 id
 D1 -> int | bool | String
 D2 -> D1 | λ
-C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S1 ;
+C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S2 ;
 F -> function D2 id ( F1 ) { A4 }
-F1 -> F2 F3
-F2 -> D1 id | λ
-F3 -> , F1 | λ
-S1 -> print ( E ) | prompt ( id ) | return E1
+F1 -> F2 | λ
+F2 -> D1 id F3
+F3 -> , F2 | λ
+S1 -> S2 | A
+S2 -> print ( E ) | prompt ( id ) | return E1
 E -> G E2
 E1 -> E | λ
 E2 -> && E | λ

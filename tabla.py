@@ -1,6 +1,6 @@
 class TablaSimbolos:
     """
-    Clase que sirve para abstraer al usuario del funcionamiento de las tablas, permitiendole hacer uso de estas
+    Clase que abstrae al usuario del funcionamiento de las tablas, permitiendole hacer uso de estas
     sin preocuparse de mantener el puntero ni el array interno.
     Solo se encarga de redirigir las funciones en caso necesario o de manejar su propio array interno con el puntero.
     """

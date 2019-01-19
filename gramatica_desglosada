@@ -23,16 +23,18 @@ D2 -> D1
 D2 -> ε
 C -> if ( E ) S1 ;
 C -> for ( A1 ; E ; A2 ) { A4 }
-C -> S1 ;
+C -> S2 ;
 F -> function D2 id ( F1 ) { A4 }
 F1 -> F2
 F1 -> ε
 F2 -> D1 id F3
 F3 -> , F2
 F3 -> ε
-S1 -> print ( E )
-S1 -> prompt ( id )
-S1 -> return E1
+S1 -> S2
+S1 -> A
+S2 -> print ( E )
+S2 -> prompt ( id )
+S2 -> return E1
 E -> G E2
 E1 -> E
 E1 -> ε
