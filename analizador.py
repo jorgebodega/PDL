@@ -9,9 +9,8 @@ fichero_ts = open('tabla_simbolos.txt', 'w')
 fichero_parse = open('parse.txt', 'w')
 fichero_error = open('error.txt', 'w')
 
-# Inicializamos el Analizador Lexico
-lexer = lexico.AnLex(fs=fichero_salida, fe=fichero_error)
-yacc = sintactico.AnSit(lexer, fichero_codigo, fichero_ts, fichero_parse, fichero_error, True)
+# Inicializamos el Analizador
+yacc = sintactico.AnSit(fichero_codigo, fichero_salida, fichero_ts, fichero_parse, fichero_error, True)
 
 yacc.analize()
 

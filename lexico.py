@@ -53,12 +53,12 @@ class AnLex(object):
     id = []
 
     # Expresiones regulares para los operadores
-    def t_op_suma(self, t):
-        r'\+{1}'
-        t.value = '-'
-        return t
     def t_op_posinc(self, t):
         r'\+{2}'
+        t.value = '-'
+        return t
+    def t_op_suma(self, t):
+        r'\+{1}'
         t.value = '-'
         return t
     def t_op_resta(self, t):
@@ -110,9 +110,10 @@ class AnLex(object):
     t_ignore = ' \t\n'
     t_ignore_COMMENT = r'/{2}[ |\w|\W]+'
 
-    def __init__(self, fs, fe):
+    def __init__(self, fs, fe, tabla_simbolos):
         self.fichero_salida = fs
         self.fichero_error = fe
+        self.tabla_simbolos = tabla_simbolos
         self.__errorCheck = False
         self.lexer = None
 
@@ -134,16 +135,16 @@ class AnLex(object):
 
     def t_PR(self, t):
         r'([a-z]|[A-Z])(\w|\_)*'
-        try:
+        if t.value in self.palabras_reservadas:
             t.value = self.palabras_reservadas.index(t.value) + 1
             return t
-        except ValueError:
-            # No problem, si salta la excepcion es que no lo ha encontrado en las palabras reservadas.
-            # Python es asi, en vez de notificar que no lo encuentra, pues te salta una excepcion en la cara.
+        else:
             return self.t_ID(t)
 
     def t_ID(self, t):
         r'([a-z]|[A-Z])(\w|\_)*'
+        if not self.tabla_simbolos.is_defined(t.value):
+            self.tabla_simbolos.insertar_id_base(t.value)
         try:
             id_position = self.id.index(t.value)
             t.value = id_position + 1
