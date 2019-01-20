@@ -1,0 +1,24 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+*	LEXEMA: 'textoPrueba'
+ 	ATRIBUTOS:
+	+	Tipo : cadena
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'enteroPrueba'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 256
+--------------------
+*	LEXEMA: 'boolPrueba'
+ 	ATRIBUTOS:
+	+	Tipo : logico
+	+	Despl : 258
+--------------------
+*	LEXEMA: 'patata'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 259
+--------------------
+==============================
+

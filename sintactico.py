@@ -1,8 +1,6 @@
 import tabla
 import lexico
-# TODO REVISAR TODOS LOS NUMEROS DEL PARSE.
-# TODO Cambiar el self.flag por self.flar_imprimir.
-# TODO Revisar mensajes de error.
+import os
 
 sizes = {
     'entero': 2,
@@ -16,7 +14,8 @@ class AnSit:
 
     def __init__(self, fichero_codigo, fichero_salida, fichero_tablas,
                  fichero_parse, fichero_error, flag_imprimir=False):
-        self.flag = flag_imprimir
+        self.flag_imprimir = flag_imprimir
+        self.fichero_salida = fichero_salida
         self.fichero_codigo = fichero_codigo
         self.fichero_tablas = fichero_tablas
         self.fichero_parse = fichero_parse
@@ -25,12 +24,12 @@ class AnSit:
         self.puntero_tokens = 0
         self.parse = 'Descendente '  # Analizador descendente recursivo
         self.tabla_simbolos = tabla.TablaSimbolos()
-        self.analizador = lexico.AnLex(fichero_salida, fichero_error, self.tabla_simbolos)
+        self.analizador = lexico.AnLex(fichero_salida, fichero_error, self.tabla_simbolos, self.flag_error)
         self.analizador.build()
         self.palabras_reservadas = self.analizador.palabras_reservadas
 
     def s0(self):
-        print('S0 -> S' if self.flag else '')
+        print('S0 -> S' if self.flag_imprimir else '')
         self.parse += '1 '
 
         # Semantico
@@ -42,7 +41,7 @@ class AnSit:
         # No hace falta destruir la tabla de simbolos, el programa para la ejecucion aqui
 
     def s(self):
-        print('S -> A ; S | D ; S | C S | F S | λ' if self.flag else '')
+        print('S -> A ; S | D ; S | C S | F S | λ' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if self.puntero_tokens == len(self.tokens):
             self.parse += '6 '
@@ -74,7 +73,7 @@ class AnSit:
                 self.s()
 
     def a(self):
-        print('A -> id = E' if self.flag else '')
+        print('A -> id = E' if self.flag_imprimir else '')
         self.parse += '7 '
         self.check_token('ID')
 
@@ -92,11 +91,11 @@ class AnSit:
         # Semantico
         tipo_dato = self.e()
         if tipo_lexema != tipo_dato:
-            self.error_semantico('El tipo de dato es diferente al tipo del identificador.')
+            self.error_semantico('El tipo de dato es diferente al tipo de identificador.')
         # Semantico
     
     def a1(self):
-        print('A1 -> A | λ' if self.flag else '')
+        print('A1 -> A | λ' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if tipo_token == 'ID':
             self.parse += '8 '
@@ -105,7 +104,7 @@ class AnSit:
             self.parse += '9 '
 
     def a2(self):
-        print('A2 -> id A3 | λ' if self.flag else '')
+        print('A2 -> id A3 | λ' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if tipo_token == 'ID':
             self.parse += '10 '
@@ -126,7 +125,7 @@ class AnSit:
             self.parse += '11 '
 
     def a3(self):
-        print('A3 -> = E | ++' if self.flag else '')
+        print('A3 -> = E | ++' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_asignacion':
             self.parse += '12 '
@@ -144,7 +143,7 @@ class AnSit:
             # Semantico
 
     def a4(self):
-        print('A4 -> C A4 | D ; A4 | A ; A4 | λ' if self.flag else '')
+        print('A4 -> C A4 | D ; A4 | A ; A4 | λ' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if tipo_token == 'PR':
             palabra = self.get_palabra_reservada()
@@ -180,7 +179,7 @@ class AnSit:
             # Semantico
 
     def d(self):
-        print('D -> var D1 id' if self.flag else '')
+        print('D -> var D1 id' if self.flag_imprimir else '')
         self.parse += '18 '
         self.check_token('PR', 'var')
 
@@ -193,17 +192,13 @@ class AnSit:
         # Semantico
         lexema = self.get_lexema()
         if self.tabla_simbolos.is_defined_only_in_pointer(lexema):
-            self.error_semantico("Identificador ya definido.")
+            self.error_semantico('Identificador definido previamente.')
         tipo_dato = retorno_d1
         self.tabla_simbolos.insertar_lexema(lexema, tipo_dato, sizes[tipo_dato])
         # Semantico
 
     def d1(self):
-        print('D1 -> int | bool | String' if self.flag else '')
-
-        # Semantico
-        valor_retorno = None  # Valor por defecto a None
-        # Semantico
+        print('D1 -> int | bool | String' if self.flag_imprimir else '')
 
         if self.get_tipo_token() == 'PR':
             palabra = self.get_palabra_reservada()
@@ -212,7 +207,7 @@ class AnSit:
                 self.check_token('PR', 'int')
 
                 # Semantico
-                valor_retorno = 'entero'
+                return 'entero'
                 # Semantico
 
             elif palabra == 'bool':
@@ -220,7 +215,7 @@ class AnSit:
                 self.check_token('PR', 'bool')
 
                 # Semantico
-                valor_retorno = 'logico'
+                return 'logico'
                 # Semantico
 
             elif palabra == 'String':
@@ -228,15 +223,13 @@ class AnSit:
                 self.check_token('PR', 'String')
 
                 # Semantico
-                valor_retorno = 'cadena'
+                return 'cadena'
                 # Semantico
-
-        # Semantico
-        return valor_retorno
-        # Semantico
+        else:
+            self.error_sintactico()
 
     def d2(self):
-        print('D2 -> D1 | λ' if self.flag else '')
+        print('D2 -> D1 | λ' if self.flag_imprimir else '')
 
         # Semantico
         valor_retorno = 'vacio'  # Valor por defecto a vacio -> void
@@ -259,7 +252,7 @@ class AnSit:
         # Semantico
 
     def c(self):
-        print('C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S2 ;' if self.flag else '')
+        print('C -> if ( E ) S1 ; | for ( A1 ; E ; A2 ) { A4 } | S2 ;' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'PR':
@@ -272,7 +265,7 @@ class AnSit:
                 # Semantico
                 retorno_e = self.e()
                 if retorno_e != 'logico':
-                    self.error_semantico('La evaluacion de un if debe ser un valor logico')
+                    self.error_semantico('La evaluacion de un if debe resultar en un valor logico.')
                 # Semantico
 
                 self.check_token('op_parencer')
@@ -296,7 +289,7 @@ class AnSit:
                 # Semantico
                 retorno_e = self.e()
                 if retorno_e != 'logico':
-                    self.error_semantico('La evaluacion de un if debe ser un valor logico')
+                    self.error_semantico('La evaluacion de un if debe resultar en un valor logico.')
                 # Semantico
 
                 self.check_token('op_ptocoma')
@@ -327,7 +320,7 @@ class AnSit:
                 # Semantico
 
     def f(self):
-        print('F -> function D2 id ( F1 ) { A4 }' if self.flag else '')
+        print('F -> function D2 id ( F1 ) { A4 }' if self.flag_imprimir else '')
         self.parse += '27 '
         self.check_token('PR', 'function')
 
@@ -340,7 +333,7 @@ class AnSit:
         # Semantico
         lexema = self.get_lexema()
         if self.tabla_simbolos.is_defined(lexema):
-            self.error_semantico("Identificador ya definido.")
+            self.error_semantico('Identificador definido previamente.')
         # Semantico
 
         self.check_token('op_parenab')
@@ -357,14 +350,14 @@ class AnSit:
         tipo_retorno = self.a4()
         if (tipo_funcion != 'vacio' and tipo_retorno != tipo_funcion) or \
            (tipo_funcion == 'vacio' and tipo_retorno is not None):
-            self.error_semantico("El tipo de retorno no coincide con el especificado en la declaración.")
+            self.error_semantico('El tipo de retorno no coincide con el especificado en la declaración.')
         self.tabla_simbolos.remove_tabla()
         # Semantico
 
         self.check_token('op_llavecer')
 
     def f1(self):
-        print('F1 -> F2 | λ' if self.flag else '')
+        print('F1 -> F2 | λ' if self.flag_imprimir else '')
         tipo_token = self.get_tipo_token()
         if tipo_token == 'PR':
             palabra = self.get_palabra_reservada()
@@ -382,7 +375,7 @@ class AnSit:
             # Semantico
 
     def f2(self):
-        print('F2 -> D1 id F3' if self.flag else '')
+        print('F2 -> D1 id F3' if self.flag_imprimir else '')
         self.parse += '30 '
 
         # Semantico
@@ -396,7 +389,7 @@ class AnSit:
         # Semantico
 
     def f3(self):
-        print('F3 -> , F2 | λ' if self.flag else '')
+        print('F3 -> , F2 | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_coma':
@@ -414,7 +407,7 @@ class AnSit:
             # Semantico
 
     def s1(self):
-        print('S1 -> S2 | A' if self.flag else '')
+        print('S1 -> S2 | A' if self.flag_imprimir else '')
 
         tipo_tokens = self.get_tipo_token()
         if tipo_tokens == 'PR':
@@ -434,7 +427,7 @@ class AnSit:
             # Semantico
 
     def s2(self):
-        print('S2 -> print ( E ) | prompt ( id ) | return E1' if self.flag else '')
+        print('S2 -> print ( E ) | prompt ( id ) | return E1' if self.flag_imprimir else '')
 
         tipo_tokens = self.get_tipo_token()
         if tipo_tokens == 'PR':
@@ -459,7 +452,7 @@ class AnSit:
                 lexema = self.get_lexema()
                 tipo_lexema = self.tabla_simbolos.tipo_lexema(lexema)
                 if not self.tabla_simbolos.is_defined(lexema) or tipo_lexema not in ['entero', 'cadena']:
-                    self.error_semantico('La operación debe realizarse sobre identificadores enteros o cadenas')
+                    self.error_semantico('La operación debe realizarse sobre identificadores enteros o cadenas.')
                 # Semantico
 
                 self.check_token('op_parencer')
@@ -476,7 +469,7 @@ class AnSit:
                 # Semantico
 
     def e(self):
-        print('E -> G E2' if self.flag else '')
+        print('E -> G E2' if self.flag_imprimir else '')
         self.parse += '38 '
 
         # Semantico
@@ -487,12 +480,12 @@ class AnSit:
             return retorno_g
         else:
             if retorno_g != 'logico':
-                self.error_semantico("Se esperaba un valor de tipo lógico")
+                self.error_semantico('Se esperaba un valor de tipo lógico.')
             return 'logico'
         # Semantico
 
     def e1(self):
-        print('E1 -> E | λ' if self.flag else '')
+        print('E1 -> E | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token in ['op_parenab', 'entero', 'cadena'] or tipo_token == 'ID':
@@ -517,7 +510,7 @@ class AnSit:
             # Semantico
 
     def e2(self):
-        print('E2 -> && E | λ' if self.flag else '')
+        print('E2 -> && E | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_and':
@@ -527,7 +520,7 @@ class AnSit:
             # Semantico
             retorno_e = self.e()
             if retorno_e != 'logico':
-                self.error_semantico("Se esperaba un valor de tipo lógico")
+                self.error_semantico('Se esperaba un valor de tipo lógico.')
             return 'logico'
             # Semantico
         else:
@@ -538,7 +531,7 @@ class AnSit:
             # Semantico
 
     def g(self):
-        print('G -> H G1' if self.flag else '')
+        print('G -> H G1' if self.flag_imprimir else '')
         self.parse += '43 '
 
         # Semantico
@@ -549,12 +542,12 @@ class AnSit:
             return retorno_h
         else:
             if retorno_h != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
+                self.error_semantico('Se esperaba un valor de tipo entero.')
             return 'logico'
         # Semantico
 
     def g1(self):
-        print('G1 -> == G | != G | λ' if self.flag else '')
+        print('G1 -> == G | != G | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_igual':
@@ -564,7 +557,7 @@ class AnSit:
             # Semantico
             retorno_g = self.g()
             if retorno_g != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
+                self.error_semantico('Se esperaba un valor de tipo entero.')
             return 'logico'
             # Semantico
         elif tipo_token == 'op_noigual':
@@ -574,7 +567,7 @@ class AnSit:
             # Semantico
             retorno_g = self.g()
             if retorno_g != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
+                self.error_semantico('Se esperaba un valor de tipo entero.')
             return 'logico'
             # Semantico
         else:
@@ -585,7 +578,7 @@ class AnSit:
             # Semantico
 
     def h(self):
-        print('H -> I H1' if self.flag else '')
+        print('H -> I H1' if self.flag_imprimir else '')
         self.parse += '47 '
 
         # Semantico
@@ -595,13 +588,14 @@ class AnSit:
         if retorno_h1 is None:
             return retorno_i
         else:
-            if retorno_i != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
+            tipo, numero_negativo = retorno_h1
+            if retorno_i != 'entero' and numero_negativo is None:
+                self.error_semantico('Se esperaba un valor de tipo entero.')
             return 'entero'
         # Semantico
 
     def h1(self):
-        print('H1 -> + H | - H | λ' if self.flag else '')
+        print('H1 -> + H | - H | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_suma':
@@ -611,8 +605,8 @@ class AnSit:
             # Semantico
             retorno_h = self.h()
             if retorno_h != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
-            return 'entero'
+                self.error_semantico('Se esperaba un valor de tipo entero.')
+            return ['entero', None]
             # Semantico
         elif tipo_token == 'op_resta':
             self.parse += '49 '
@@ -621,8 +615,8 @@ class AnSit:
             # Semantico
             retorno_h = self.h()
             if retorno_h != 'entero':
-                self.error_semantico("Se esperaba un valor de tipo entero")
-            return 'entero'
+                self.error_semantico('Se esperaba un valor de tipo entero.')
+            return ['entero', 'negative']
             # Semantico
         else:
             self.parse += '50 '
@@ -632,7 +626,7 @@ class AnSit:
             # Semantico
 
     def i(self):
-        print('I -> id J | ( E ) | entero | cadena | True | False' if self.flag else '')
+        print('I -> id J | ( E ) | entero | cadena | True | False' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'ID':
@@ -642,18 +636,23 @@ class AnSit:
             # Semantico
             lexema = self.get_lexema()
             if not self.tabla_simbolos.is_defined(lexema):
-                self.error_semantico("Identificador no definido")
+                self.error_semantico('Identificador no definido.')
 
             tipo_lexema = self.get_tipo_id(lexema)
             retorno_j = self.j()
 
-            if retorno_j == 'entero':
+            if retorno_j is None:
+                return tipo_lexema
+            if retorno_j[0] == 'entero':
                 if tipo_lexema != 'entero':
-                    self.error_semantico("Se esperaba un tipo de dato entero para autoincrementar")
+                    self.error_semantico('Se esperaba un tipo de dato entero.')
                 return 'entero'
-            elif retorno_j == 'funcion':
+            elif retorno_j[0] == 'funcion':
+                parametros = retorno_j[1]
                 if tipo_lexema != 'funcion':
-                    self.error_semantico("Se esperaba identificador de tipo función")
+                    self.error_semantico('Se esperaba identificador de tipo función.')
+                if parametros != self.tabla_simbolos.tipo_parametros(lexema):
+                    self.error_semantico('Los parametros de la funcion son incorrectos.')
                 return self.tabla_simbolos.tipo_retorno(lexema)
             else:
                 return tipo_lexema
@@ -703,7 +702,7 @@ class AnSit:
                 # Semantico
 
     def j(self):
-        print('J -> ++ | ( Z ) | λ' if self.flag else '')
+        print('J -> ++ | ( Z ) | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_posinc':
@@ -711,16 +710,20 @@ class AnSit:
             self.check_token('op_posinc')
 
             # Semantico
-            return 'entero'
+            return ['entero', None]
             # Semantico
         elif tipo_token == 'op_parenab':
             self.parse += '58 '
             self.check_token('op_parenab')
-            self.z()
+
+            # Semantico
+            parametros = self.z()
+            # Semantico
+
             self.check_token('op_parencer')
 
             # Semantico
-            return 'funcion'
+            return ['funcion', parametros]
             # Semantico
         else:
             self.parse += '59 '
@@ -730,7 +733,7 @@ class AnSit:
             # Semantico
 
     def z(self):
-        print('Z -> id Z1 | λ' if self.flag else '')
+        print('Z -> id Z1 | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'ID':
@@ -740,15 +743,21 @@ class AnSit:
             # Semantico
             lexema = self.get_lexema()
             if not self.tabla_simbolos.is_defined(lexema):
-                self.error_semantico("Identificador no definido")
-            # Semantico
+                self.error_semantico('Identificador no definido.')
+            values = [self.tabla_simbolos.tipo_lexema(lexema)]
 
-            self.z1()
+            values += self.z1()
+            return values
+            # Semantico
         else:
             self.parse += '61 '
 
+            # Semantico
+            return []
+            # Semantico
+
     def z1(self):
-        print('Z1 -> , id Z1 | λ' if self.flag else '')
+        print('Z1 -> , id Z1 | λ' if self.flag_imprimir else '')
 
         tipo_token = self.get_tipo_token()
         if tipo_token == 'op_coma':
@@ -759,18 +768,28 @@ class AnSit:
             # Semantico
             lexema = self.get_lexema()
             if not self.tabla_simbolos.is_defined(lexema):
-                self.error_semantico("Identificador no definido")
-            # Semantico
+                self.error_semantico('Identificador no definido.')
+            values = [self.tabla_simbolos.tipo_lexema(lexema)]
 
-            self.z1()
+            values += self.z1()
+            return values
+            # Semantico
         else:
             self.parse += '63 '
+
+            # Semantico
+            return []
+            # Semantico
+
+    # Final metodos del analizador
 
     def analize(self):
         """Ejecuta el programa e inserta los resultados en los fichero correspondientes."""
         self.s0()  # Inicia la ejecucion.
         self.fichero_parse.write(self.parse)
         self.fichero_tablas.write(str(self.tabla_simbolos))
+        self.cerrar_descriptores()
+        self.borrar_vacios()
 
     def get_newtokens(self):
         """Obtiene los tokens correspodientes a la siguiente linea de codigo, hasta que se acaba el fichero."""
@@ -778,7 +797,7 @@ class AnSit:
         if len(new_line) != 0:
             new_tokens = self.analizador.tokenizeLine(new_line)
             if len(new_tokens) != 0:
-                print(new_tokens if self.flag else '')
+                print(new_tokens if self.flag_imprimir else '')
                 self.tokens += new_tokens
             else:
                 self.get_newtokens()
@@ -834,7 +853,9 @@ class AnSit:
         error = 'Error Sintáctico (Linea %d): Token %s erroneo' % (self.analizador.lineaActual() - 1,
                                                                    str(self.tokens[self.puntero_tokens]))
         self.fichero_error.write(error)
-        print(error if self.flag else '')
+        print(error if self.flag_imprimir else '')
+        self.cerrar_descriptores()
+        self.borrar_vacios()
         exit()
 
     def error_semantico(self, mensaje='<Mensaje no definido>'):
@@ -842,5 +863,22 @@ class AnSit:
         error = 'Error Semántico (Linea %d): ' % (self.analizador.lineaActual() - 1)
         error += mensaje
         self.fichero_error.write(error + '\n')
-        print(error if self.flag else '')
+        print(error if self.flag_imprimir else '')
+        self.cerrar_descriptores()
+        self.borrar_vacios()
         exit()
+
+    def cerrar_descriptores(self):
+        self.fichero_codigo.close()
+        self.fichero_error.close()
+        self.fichero_tablas.close()
+        self.fichero_salida.close()
+        self.fichero_parse.close()
+
+    def borrar_vacios(self):
+        if os.stat('error.txt').st_size == 0:
+            os.remove('error.txt')
+        if os.stat('parse.txt').st_size == 0:
+            os.remove('parse.txt')
+        if os.stat('tabla_simbolos.txt').st_size == 0:
+            os.remove('tabla_simbolos.txt')

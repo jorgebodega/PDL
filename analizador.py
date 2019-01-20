@@ -1,5 +1,4 @@
-import os
-import lexico
+import sys
 import sintactico
 
 # Puntero a los ficheros que iremos creando o usando
@@ -10,20 +9,11 @@ fichero_parse = open('parse.txt', 'w')
 fichero_error = open('error.txt', 'w')
 
 # Inicializamos el Analizador
-yacc = sintactico.AnSit(fichero_codigo, fichero_salida, fichero_ts, fichero_parse, fichero_error, True)
+flag_imprimir = False
+if len(sys.argv) > 1:
+    flag_imprimir = sys.argv[1]
+
+yacc = sintactico.AnSit(fichero_codigo, fichero_salida, fichero_ts,
+                        fichero_parse, fichero_error, flag_imprimir)
 
 yacc.analize()
-
-# Cerramos descriptores de ficheros
-fichero_codigo.close()
-fichero_error.close()
-fichero_ts.close()
-fichero_salida.close()
-fichero_parse.close()
-
-if os.stat('error.txt').st_size == 0:
-    os.remove('error.txt')
-if os.stat('parse.txt').st_size == 0:
-    os.remove('parse.txt')
-if os.stat('tabla_simbolos.txt').st_size == 0:
-    os.remove('tabla_simbolos.txt')

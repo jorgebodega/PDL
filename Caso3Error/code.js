@@ -1,6 +1,7 @@
-// Probamos algunas palabras reservadas
-var int j__j_;
-j__j_= a + b;
-var int i;
-prompt(i);
-if (j__j_ && i && i) j__j_= b + a;
+var int a;
+var String b;
+var bool c;
+
+a = 2;
+b = "Prueba";
+c = 1;

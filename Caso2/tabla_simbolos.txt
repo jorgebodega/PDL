@@ -1,0 +1,30 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'valor0'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 2
+	+	numParam : 0
+	+	TipoRetorno : entero
+--------------------
+*	LEXEMA: 'prueba'
+ 	ATRIBUTOS:
+	+	Tipo : cadena
+	+	Despl : 4
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_valor0
+
+*	LEXEMA: 'j'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+==============================
+

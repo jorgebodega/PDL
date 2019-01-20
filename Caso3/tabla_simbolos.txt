@@ -1,0 +1,88 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+*	LEXEMA: 'suma'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 0
+	+	numParam : 2
+	+	TipoRetorno : entero
+	+	TipoParam1 : entero
+	+	TipoParam2 : entero
+--------------------
+*	LEXEMA: 'logica'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 2
+	+	numParam : 0
+	+	TipoRetorno : logico
+--------------------
+*	LEXEMA: 'sumaSinRetorno'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 4
+	+	numParam : 2
+	+	TipoRetorno : vacio
+	+	TipoParam1 : entero
+	+	TipoParam2 : entero
+--------------------
+*	LEXEMA: 'bucle'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 6
+	+	numParam : 1
+	+	TipoRetorno : entero
+	+	TipoParam1 : entero
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_suma
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'b'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_logica
+
+==============================
+
+CONTENIDO DE LA TABLA # TS_sumaSinRetorno
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'b'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+*	LEXEMA: 'c'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 4
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_bucle
+
+*	LEXEMA: 'limite'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'i'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+==============================
+

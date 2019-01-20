@@ -1,0 +1,12 @@
+<PR, 3>
+<PR, 5>
+<ID, 1>
+<op_ptocoma, ->
+<PR, 11>
+<op_parenab, ->
+<PR, 1>
+<op_ptocoma, ->
+<ID, 1>
+<op_posinc, ->
+<op_parencer, ->
+<op_llaveab, ->

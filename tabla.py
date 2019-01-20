@@ -75,6 +75,14 @@ class TablaSimbolos:
         valor = self.__tablas['TSGeneral'].tipo_retorno(lexema)
         return valor
 
+    def tipo_parametros(self, lexema):
+        """
+        Devuelve el tipo del id si esta esta definido.
+        :param lexema: Id que se quiere comprobar.
+        :return: Tipo lexema | None
+        """
+        return self.__tablas['TSGeneral'].tipo_parametros(lexema)
+
     def insertar_funcion(self, lexema, size, parametros, tipo_retorno):
         """
         Inserta el lexema nuevo en la tabla actualmente apuntada, marcando que es una funcion.
@@ -157,6 +165,18 @@ class Tabla:
         """
         valor = self.tabla[lexema]['TipoRetorno']
         return valor
+
+    def tipo_parametros(self, lexema):
+        """
+        Devuelve el tipo del id si esta esta definido.
+        :param lexema: Id que se quiere comprobar.
+        :return: Tipo lexema | None
+        """
+        numparam = self.tabla[lexema]['numParam']
+        parametros = []
+        for i in range(numparam):
+            parametros.append(self.tabla[lexema]['TipoParam%d' % (i + 1)])
+        return parametros
 
     def is_defined(self, lexema):
         """

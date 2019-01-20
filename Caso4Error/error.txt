@@ -1,0 +1,1 @@
+Error Semántico (Linea 25): El tipo de retorno no coincide con el especificado en la declaración.

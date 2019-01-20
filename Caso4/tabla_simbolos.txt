@@ -1,0 +1,82 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : cadena
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'b'
+ 	ATRIBUTOS:
+	+	Tipo : logico
+	+	Despl : 256
+--------------------
+*	LEXEMA: 'c'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 257
+--------------------
+*	LEXEMA: 'funcion1'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 259
+	+	numParam : 0
+	+	TipoRetorno : cadena
+--------------------
+*	LEXEMA: 'global1'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 261
+--------------------
+*	LEXEMA: 'funcion2'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 263
+	+	numParam : 0
+	+	TipoRetorno : logico
+--------------------
+*	LEXEMA: 'global2'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 265
+--------------------
+*	LEXEMA: 'funcion3'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 267
+	+	numParam : 0
+	+	TipoRetorno : entero
+--------------------
+*	LEXEMA: 'global3'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 269
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_funcion1
+
+*	LEXEMA: 'retorno'
+ 	ATRIBUTOS:
+	+	Tipo : cadena
+	+	Despl : 0
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_funcion2
+
+*	LEXEMA: 'retorno'
+ 	ATRIBUTOS:
+	+	Tipo : logico
+	+	Despl : 0
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_funcion3
+
+*	LEXEMA: 'retorno'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+==============================
+

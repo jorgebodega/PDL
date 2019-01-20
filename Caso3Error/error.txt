@@ -1,0 +1,1 @@
+Error Semántico (Linea 7): El tipo de dato es diferente al tipo de identificador.

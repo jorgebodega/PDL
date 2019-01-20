@@ -1,0 +1,1 @@
+Error Lexico (Linea 6): Caracter no permitido ":"

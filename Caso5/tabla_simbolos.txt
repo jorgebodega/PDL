@@ -1,0 +1,79 @@
+CONTENIDO DE LA TABLA # TSGeneral
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'resultado'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+*	LEXEMA: 'multibucle'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 4
+	+	numParam : 2
+	+	TipoRetorno : entero
+	+	TipoParam1 : entero
+	+	TipoParam2 : entero
+--------------------
+*	LEXEMA: 'recursividad'
+ 	ATRIBUTOS:
+	+	Tipo : funcion
+	+	Despl : 6
+	+	numParam : 1
+	+	TipoRetorno : entero
+	+	TipoParam1 : entero
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_multibucle
+
+*	LEXEMA: 'a'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'n'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+*	LEXEMA: 'i'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 4
+--------------------
+*	LEXEMA: 'j'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 6
+--------------------
+*	LEXEMA: 'z'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 8
+--------------------
+==============================
+
+CONTENIDO DE LA TABLA # TS_recursividad
+
+*	LEXEMA: 'p'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 0
+--------------------
+*	LEXEMA: 'b'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 2
+--------------------
+*	LEXEMA: 'suma'
+ 	ATRIBUTOS:
+	+	Tipo : entero
+	+	Despl : 4
+--------------------
+==============================
+

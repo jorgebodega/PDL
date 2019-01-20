@@ -1,0 +1,1 @@
+Error Semántico (Linea 26): Los parametros de la funcion son incorrectos.
