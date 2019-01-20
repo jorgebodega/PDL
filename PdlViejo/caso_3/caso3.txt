@@ -1,5 +1,0 @@
-var bool n
-n = True
-
-if (n &= True) {
-}

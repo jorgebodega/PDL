@@ -3,33 +3,33 @@ S -> A ; S
 S -> D ; S 
 S -> C S
 S -> F S
-S -> ε
+S -> λ
 A -> id = E
 A1 -> A
-A1 -> ε
+A1 -> λ
 A2 -> id A3
-A2 -> ε
+A2 -> λ
 A3 -> = E
 A3 -> ++
 A4 -> C A4
 A4 -> D ; A4
 A4 -> A ; A4
-A4 -> ε
+A4 -> λ
 D -> var D1 id
 D1 -> int 
 D1 -> bool
 D1 -> String
 D2 -> D1
-D2 -> ε
+D2 -> λ
 C -> if ( E ) S1 ;
 C -> for ( A1 ; E ; A2 ) { A4 }
 C -> S2 ;
 F -> function D2 id ( F1 ) { A4 }
 F1 -> F2
-F1 -> ε
+F1 -> λ
 F2 -> D1 id F3
 F3 -> , F2
-F3 -> ε
+F3 -> λ
 S1 -> S2
 S1 -> A
 S2 -> print ( E )
@@ -37,17 +37,17 @@ S2 -> prompt ( id )
 S2 -> return E1
 E -> G E2
 E1 -> E
-E1 -> ε
+E1 -> λ
 E2 -> && E
-E2 -> ε
+E2 -> λ
 G -> H G1
 G1 -> == G
 G1 -> != G
-G1 -> ε
+G1 -> λ
 H -> I H1
 H1 -> + H
 H1 -> - H
-H1 -> ε
+H1 -> λ
 I -> id J
 I -> ( E )
 I -> entero
@@ -56,8 +56,8 @@ I -> True
 I -> False
 J -> ++
 J -> ( Z )
-J -> ε
+J -> λ
 Z -> id Z1
-Z -> ε
+Z -> λ
 Z1 -> , id Z1
-Z1 -> ε
+Z1 -> λ

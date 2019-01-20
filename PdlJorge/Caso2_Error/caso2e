@@ -1,7 +1,0 @@
-// Prueba de comentario
-var int a
-a = False
-var bool b
-b = False
-var chars c
-c = "PDL"

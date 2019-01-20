@@ -205,7 +205,6 @@ class Tabla:
         :param lexema: id que modificar en la tabla.
         :param tipo_dato: Tipo del lexema que queremos introducir. Cualquiera menos funciones.
         :param size: Tamaño del lexema. Viene determinado previamente por el tipo de dato.
-        :return:
         """
         self.tabla[lexema] = {
             'Tipo': tipo_dato,
@@ -217,8 +216,10 @@ class Tabla:
         """
         Cambia el id por una funcion en la tabla de contenido.
 
-        :param lexema: id que modificar en la tabla.
-        :return:
+        :param lexema: Identificador que modificar
+        :param size: Tamaño del puntero
+        :param parametros: Parametros de la funcion
+        :param tipo_retorno: Tipo de retorno de la funcion
         """
         self.tabla[lexema] = {
             'Tipo': 'funcion',
@@ -228,7 +229,6 @@ class Tabla:
         }
         for index, param in enumerate(parametros, start=1):
             self.tabla[lexema]['TipoParam%d' % index] = param[0]
-        # Vamos a dar por hecho que los punteros son de 4 bytes
         self.desplazamiento += size
 
     def remove_attr(self, lexema):

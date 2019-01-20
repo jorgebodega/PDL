@@ -1,8 +1,0 @@
-function int FactorialRecursivo (int n, bool p)	
-{
-	if (p &= True)	{
-	} else {
-	n=s+1
-	}
-	return FactorialRecursivo ( n , False )	 
-}

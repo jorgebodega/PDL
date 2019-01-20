@@ -1,5 +1,0 @@
-Con python 2.7 instalado, para ejecutarlo se usa el comando:
-
-	python ../analizador.py (nombre la prueba)
-
-Considerando siempre que hay que estar dentro de la carpeta correspondiente a cada prueba, para que nos genere todos los archivos necesarios dentro de la misma
