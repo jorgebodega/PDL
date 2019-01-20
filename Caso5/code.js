@@ -1,22 +1,28 @@
 // Probamos algunas palabras reservadas
-function int suma (int a, int b) {
-    return a + b;
-}
+var int a;
+var int resultado;
 
-function bool logica () {
-    return True;
-    return 0;
-}
-
-function sumaSinRetorno (int a, int b) {
-    var int c;
-    c = a + b;
-}
-
-function int bucle (int limite) {
+function int multibucle (int a, int n) {
+    resultado = 0;
     var int i;
-    for (i = 0; True; i++){
-        print(i);
-        if (i == 10) return 10;
+    var int j;
+    var int z;
+    for (i = 0; True && False; i++) {
+        for (j = i; True; j = i + 100){
+            for (z = i + j; False; z = i + j + j){
+                resultado = i + j + z;
+            }
+        }
     }
+    print(resultado);
+    prompt(i);
+    return resultado;
+}
+
+function int recursividad (int p) {
+    var int b;
+    var int suma;
+    suma = p + 1;
+    b = recursividad(suma);
+    if (b == 10) return b;
 }

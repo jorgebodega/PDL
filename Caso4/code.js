@@ -1,22 +1,32 @@
 // Probamos algunas palabras reservadas
-function int suma (int a, int b) {
-    return a + b;
+
+var String a;
+var bool b;
+var int c;
+
+function String funcion1 () {
+    global1 = 1;
+    var String retorno;
+    retorno = "Valor de prueba para el retorno";
+    return retorno;
 }
 
-function bool logica () {
-    return True;
-    return 0;
+function bool funcion2 () {
+    global2 = 2;
+    var bool retorno;
+    retorno = True;
+    return retorno;
 }
 
-function sumaSinRetorno (int a, int b) {
-    var int c;
-    c = a + b;
+function int funcion3 () {
+    global3 = 3;
+    var int retorno;
+    retorno = 1337;
+    return retorno;
 }
 
-function int bucle (int limite) {
-    var int i;
-    for (i = 0; True; i++){
-        print(i);
-        if (i == 10) return 10;
-    }
-}
+a = funcion1();
+b = funcion2();
+c = funcion3();
+
+if (b && (c == c)) print("True");

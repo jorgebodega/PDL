@@ -1,6 +1,22 @@
 // Probamos algunas palabras reservadas
-var int j__j_;
-j__j_= a + b;
-var int i;
-prompt(i);
-if (j__j_ && i && i) print(j__j_ && i);
+function int suma (int a, int b) {
+    return a + b;
+}
+
+function bool logica () {
+    return True;
+    return 0;
+}
+
+function sumaSinRetorno (int a, int b) {
+    var int c;
+    c = a + b;
+}
+
+function int bucle (int limite) {
+    var int i;
+    for (i = 0; True; i++){
+        print(i);
+        if (i == 10) return 10;
+    }
+}
