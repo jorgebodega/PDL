@@ -24,7 +24,7 @@ class AnSit:
         self.puntero_tokens = 0
         self.parse = 'Descendente '  # Analizador descendente recursivo
         self.tabla_simbolos = tabla.TablaSimbolos()
-        self.analizador = lexico.AnLex(fichero_salida, fichero_error, self.tabla_simbolos, self.flag_error)
+        self.analizador = lexico.AnLex(fichero_salida, fichero_error, self.tabla_simbolos)
         self.analizador.build()
         self.palabras_reservadas = self.analizador.palabras_reservadas
 
@@ -880,5 +880,3 @@ class AnSit:
             os.remove('error.txt')
         if os.stat('parse.txt').st_size == 0:
             os.remove('parse.txt')
-        if os.stat('tabla_simbolos.txt').st_size == 0:
-            os.remove('tabla_simbolos.txt')

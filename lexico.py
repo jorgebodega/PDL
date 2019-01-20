@@ -110,7 +110,7 @@ class AnLex(object):
     t_ignore = ' \t\n'
     t_ignore_COMMENT = r'/{2}[ |\w|\W]+'
 
-    def __init__(self, fs, fe, tabla_simbolos, flag_error):
+    def __init__(self, fs, fe, tabla_simbolos):
         self.fichero_salida = fs
         self.fichero_error = fe
         self.tabla_simbolos = tabla_simbolos
