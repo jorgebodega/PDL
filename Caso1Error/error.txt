@@ -1,1 +1,0 @@
-Error Sintactico (Linea 7): Token <PR, 6> erroneo
